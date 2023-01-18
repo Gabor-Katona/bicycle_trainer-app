@@ -1,0 +1,213 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_OUTPUT_EXCMD	mixed	/number, pattern, mixed, or combineV2/
+!_TAG_OUTPUT_FILESEP	slash	/slash or backslash/
+!_TAG_OUTPUT_MODE	u-ctags	/u-ctags or e-ctags/
+!_TAG_PATTERN_LENGTH_LIMIT	96	/0 for no limit/
+!_TAG_PROC_CWD	/home/yurii/Documents/web-projects/v3/	//
+!_TAG_PROGRAM_AUTHOR	Universal Ctags Team	//
+!_TAG_PROGRAM_NAME	Universal Ctags	/Derived from Exuberant Ctags/
+!_TAG_PROGRAM_URL	https://ctags.io/	/official site/
+!_TAG_PROGRAM_VERSION	5.9.0	/acbd555b/
+APP_BASE_NAME	android/gradlew.bat	/^set APP_BASE_NAME=%~n0$/;"	v
+APP_HOME	android/gradlew.bat	/^for %%i in ("%APP_HOME%") do set APP_HOME=%%~fi$/;"	v
+APP_HOME	android/gradlew.bat	/^set APP_HOME=%DIRNAME%$/;"	v
+App	App.js	/^export default class App extends Component {$/;"	c
+AppDelegate	ios/v3/AppDelegate.h	/^@interface AppDelegate : UIResponder <UIApplicationDelegate, RCTBridgeDelegate>$/;"	i	protocols:UIApplicationDelegate,RCTBridgeDelegate
+AppDelegate	ios/v3/AppDelegate.mm	/^@implementation AppDelegate$/;"	I
+AppDelegate	ios/v3/AppDelegate.mm	/^@interface AppDelegate () <RCTCxxBridgeDelegate, RCTTurboModuleManagerDelegate> {$/;"	i	category:RCTCxxBridgeDelegate
+Bluetooth	App.js	/^          <Text>Bluetooth scanner<\/Text>$/;"	M	class:App
+Builder	android/app/src/main/java/com/v3/newarchitecture/modules/MainApplicationTurboModuleManagerDelegate.java	/^  public static class Builder extends ReactPackageTurboModuleManagerDelegate.Builder {$/;"	c	class:MainApplicationTurboModuleManagerDelegate
+Button	App.js	/^          <Button$/;"	M	class:App
+CFBundleDevelopmentRegion	ios/v3/Info.plist	/^	<key>CFBundleDevelopmentRegion<\/key>$/;"	k
+CFBundleDevelopmentRegion	ios/v3Tests/Info.plist	/^	<key>CFBundleDevelopmentRegion<\/key>$/;"	k
+CFBundleDisplayName	ios/v3/Info.plist	/^	<key>CFBundleDisplayName<\/key>$/;"	k
+CFBundleExecutable	ios/v3/Info.plist	/^	<key>CFBundleExecutable<\/key>$/;"	k
+CFBundleExecutable	ios/v3Tests/Info.plist	/^	<key>CFBundleExecutable<\/key>$/;"	k
+CFBundleIdentifier	ios/v3/Info.plist	/^	<key>CFBundleIdentifier<\/key>$/;"	k
+CFBundleIdentifier	ios/v3Tests/Info.plist	/^	<key>CFBundleIdentifier<\/key>$/;"	k
+CFBundleInfoDictionaryVersion	ios/v3/Info.plist	/^	<key>CFBundleInfoDictionaryVersion<\/key>$/;"	k
+CFBundleInfoDictionaryVersion	ios/v3Tests/Info.plist	/^	<key>CFBundleInfoDictionaryVersion<\/key>$/;"	k
+CFBundleName	ios/v3/Info.plist	/^	<key>CFBundleName<\/key>$/;"	k
+CFBundleName	ios/v3Tests/Info.plist	/^	<key>CFBundleName<\/key>$/;"	k
+CFBundlePackageType	ios/v3/Info.plist	/^	<key>CFBundlePackageType<\/key>$/;"	k
+CFBundlePackageType	ios/v3Tests/Info.plist	/^	<key>CFBundlePackageType<\/key>$/;"	k
+CFBundleShortVersionString	ios/v3/Info.plist	/^	<key>CFBundleShortVersionString<\/key>$/;"	k
+CFBundleShortVersionString	ios/v3Tests/Info.plist	/^	<key>CFBundleShortVersionString<\/key>$/;"	k
+CFBundleSignature	ios/v3/Info.plist	/^	<key>CFBundleSignature<\/key>$/;"	k
+CFBundleSignature	ios/v3Tests/Info.plist	/^	<key>CFBundleSignature<\/key>$/;"	k
+CFBundleVersion	ios/v3/Info.plist	/^	<key>CFBundleVersion<\/key>$/;"	k
+CFBundleVersion	ios/v3Tests/Info.plist	/^	<key>CFBundleVersion<\/key>$/;"	k
+CLASSPATH	android/gradlew.bat	/^set CLASSPATH=%APP_HOME%\\gradle\\wrapper\\gradle-wrapper.jar$/;"	v
+DEFAULT_JVM_OPTS	android/gradlew.bat	/^set DEFAULT_JVM_OPTS="-Xmx64m" "-Xms64m"$/;"	v
+DIRNAME	android/gradlew.bat	/^if "%DIRNAME%" == "" set DIRNAME=.$/;"	v
+DIRNAME	android/gradlew.bat	/^set DIRNAME=%~dp0$/;"	v
+FLIPPER_VERSION	android/gradle.properties	/^FLIPPER_VERSION=0.125.0$/;"	k
+Get a message	App.js	/^                title={"Get a message"}$/;"	M	variable:
+JAVA_EXE	android/gradlew.bat	/^set JAVA_EXE=%JAVA_HOME%\/bin\/java.exe$/;"	v
+JAVA_EXE	android/gradlew.bat	/^set JAVA_EXE=java.exe$/;"	v
+JAVA_HOME	android/gradlew.bat	/^set JAVA_HOME=%JAVA_HOME:"=%$/;"	v
+JNI_OnLoad	android/app/src/main/jni/OnLoad.cpp	/^JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *) {$/;"	f	typeref:typename:JNIEXPORT jint JNICALL
+LSRequiresIPhoneOS	ios/v3/Info.plist	/^	<key>LSRequiresIPhoneOS<\/key>$/;"	k
+MainActivity	android/app/src/main/java/com/v3/MainActivity.java	/^public class MainActivity extends ReactActivity {$/;"	c
+MainActivityDelegate	android/app/src/main/java/com/v3/MainActivity.java	/^    public MainActivityDelegate(ReactActivity activity, String mainComponentName) {$/;"	m	class:MainActivity.MainActivityDelegate
+MainActivityDelegate	android/app/src/main/java/com/v3/MainActivity.java	/^  public static class MainActivityDelegate extends ReactActivityDelegate {$/;"	c	class:MainActivity
+MainApplication	android/app/src/main/java/com/v3/MainApplication.java	/^public class MainApplication extends Application implements ReactApplication {$/;"	c
+MainApplicationModuleProvider	android/app/src/main/jni/MainApplicationModuleProvider.cpp	/^std::shared_ptr<TurboModule> MainApplicationModuleProvider($/;"	f	namespace:facebook::react	typeref:typename:std::shared_ptr<TurboModule>
+MainApplicationReactNativeHost	android/app/src/main/java/com/v3/newarchitecture/MainApplicationReactNativeHost.java	/^  public MainApplicationReactNativeHost(Application application) {$/;"	m	class:MainApplicationReactNativeHost
+MainApplicationReactNativeHost	android/app/src/main/java/com/v3/newarchitecture/MainApplicationReactNativeHost.java	/^public class MainApplicationReactNativeHost extends ReactNativeHost {$/;"	c
+MainApplicationTurboModuleManagerDelegate	android/app/src/main/java/com/v3/newarchitecture/modules/MainApplicationTurboModuleManagerDelegate.java	/^  protected MainApplicationTurboModuleManagerDelegate($/;"	m	class:MainApplicationTurboModuleManagerDelegate
+MainApplicationTurboModuleManagerDelegate	android/app/src/main/java/com/v3/newarchitecture/modules/MainApplicationTurboModuleManagerDelegate.java	/^public class MainApplicationTurboModuleManagerDelegate$/;"	c
+MainApplicationTurboModuleManagerDelegate	android/app/src/main/jni/MainApplicationTurboModuleManagerDelegate.h	/^class MainApplicationTurboModuleManagerDelegate$/;"	c	namespace:facebook::react
+MainComponentsRegistry	android/app/src/main/java/com/v3/newarchitecture/components/MainComponentsRegistry.java	/^  private MainComponentsRegistry(ComponentFactory componentFactory) {$/;"	m	class:MainComponentsRegistry	file:
+MainComponentsRegistry	android/app/src/main/java/com/v3/newarchitecture/components/MainComponentsRegistry.java	/^public class MainComponentsRegistry {$/;"	c
+MainComponentsRegistry	android/app/src/main/jni/MainComponentsRegistry.cpp	/^MainComponentsRegistry::MainComponentsRegistry(ComponentFactory *delegate) {}$/;"	f	class:facebook::react::MainComponentsRegistry
+MainComponentsRegistry	android/app/src/main/jni/MainComponentsRegistry.h	/^class MainComponentsRegistry$/;"	c	namespace:facebook::react
+NSAppTransportSecurity	ios/v3/Info.plist	/^	<key>NSAppTransportSecurity<\/key>$/;"	k
+NSExceptionAllowsInsecureHTTPLoads	ios/v3/Info.plist	/^				<key>NSExceptionAllowsInsecureHTTPLoads<\/key>$/;"	k	key:NSAppTransportSecurity.NSExceptionDomains.localhost
+NSExceptionDomains	ios/v3/Info.plist	/^		<key>NSExceptionDomains<\/key>$/;"	k	key:NSAppTransportSecurity
+NSLocationWhenInUseUsageDescription	ios/v3/Info.plist	/^	<key>NSLocationWhenInUseUsageDescription<\/key>$/;"	k
+RCTCxxBridgeDelegate	ios/v3/AppDelegate.mm	/^@interface AppDelegate () <RCTCxxBridgeDelegate, RCTTurboModuleManagerDelegate> {$/;"	C	interface:AppDelegate
+ReactNativeFlipper	android/app/src/debug/java/com/v3/ReactNativeFlipper.java	/^public class ReactNativeFlipper {$/;"	c
+ScrollView	App.js	/^        <ScrollView>$/;"	M	class:App
+Send a message	App.js	/^                title={"Send a message"}$/;"	M	variable:
+TEXT_TO_LOOK_FOR	ios/v3Tests/v3Tests.m	/^#define TEXT_TO_LOOK_FOR @"Welcome to React"$/;"	M
+TIMEOUT_SECONDS	ios/v3Tests/v3Tests.m	/^#define TIMEOUT_SECONDS 600$/;"	M
+Text	App.js	/^          <Text>Bluetooth scanner<\/Text>$/;"	M	class:App
+UILaunchStoryboardName	ios/v3/Info.plist	/^	<key>UILaunchStoryboardName<\/key>$/;"	k
+UIRequiredDeviceCapabilities	ios/v3/Info.plist	/^	<key>UIRequiredDeviceCapabilities<\/key>$/;"	k
+UISupportedInterfaceOrientations	ios/v3/Info.plist	/^	<key>UISupportedInterfaceOrientations<\/key>$/;"	k
+UIViewControllerBasedStatusBarAppearance	ios/v3/Info.plist	/^	<key>UIViewControllerBasedStatusBarAppearance<\/key>$/;"	k
+__anonc9f72b550102	android/app/src/main/jni/MainComponentsRegistry.cpp	/^      -> ComponentDescriptorRegistry::Shared {$/;"	f	function:facebook::react::MainComponentsRegistry::initHybrid	typeref:typename:ComponentDescriptorRegistry::Shared	file:
+__anonce7d718e0102	android/app/src/main/jni/OnLoad.cpp	/^  return facebook::jni::initialize(vm, [] {$/;"	f	function:JNI_OnLoad	file:
+_bridgeAdapter	ios/v3/AppDelegate.mm	/^  RCTSurfacePresenterBridgeAdapter *_bridgeAdapter;$/;"	E	interface:AppDelegate
+_contextContainer	ios/v3/AppDelegate.mm	/^  facebook::react::ContextContainer::Shared _contextContainer;$/;"	E	interface:AppDelegate
+_reactNativeConfig	ios/v3/AppDelegate.mm	/^  std::shared_ptr<const facebook::react::ReactNativeConfig> _reactNativeConfig;$/;"	E	interface:AppDelegate
+_turboModuleManager	ios/v3/AppDelegate.mm	/^  RCTTurboModuleManager *_turboModuleManager;$/;"	E	interface:AppDelegate
+android	android/app/src/debug/AndroidManifest.xml	/^    xmlns:tools="http:\/\/schemas.android.com\/tools">$/;"	n	uri:http://schemas.android.com/apk/res/android
+android	android/app/src/main/AndroidManifest.xml	/^  package="com.v3">$/;"	n	uri:http://schemas.android.com/apk/res/android
+android	android/app/src/main/res/drawable/rn_edit_text_material.xml	/^       android:insetBottom="@dimen\/abc_edit_text_inset_bottom_material">$/;"	n	uri:http://schemas.android.com/apk/res/android
+android.enableJetifier	android/gradle.properties	/^android.enableJetifier=true$/;"	k
+android.useAndroidX	android/gradle.properties	/^android.useAndroidX=true$/;"	k
+anonymousObject5532de9b0105	metro.config.js	/^    getTransformOptions: async () => ({$/;"	v	property:module.exports.transformer
+anonymousObjecta7a74a510105	App.js	/^          this.setState({ devices: [...this.state.devices] });$/;"	v
+anonymousObjecta7a74a510205	App.js	/^    BleManager.start({ showAlert: false }).then(() => {$/;"	v
+anonymousObjecta7a74a510305	App.js	/^          this.setState({ currentDevice: device });$/;"	v
+anonymousObjecta7a74a510405	App.js	/^            this.setState({$/;"	v
+application:didFinishLaunchingWithOptions:	ios/v3/AppDelegate.mm	/^{$/;"	m	implementation:AppDelegate
+buffer	App.js	/^        const buffer = Buffer.from(readData); \/\/https:\/\/github.com\/feross\/buffer#convert-a/;"	C
+build	android/app/src/main/java/com/v3/newarchitecture/modules/MainApplicationTurboModuleManagerDelegate.java	/^    protected MainApplicationTurboModuleManagerDelegate build($/;"	m	class:MainApplicationTurboModuleManagerDelegate.Builder
+canCreateTurboModule	android/app/src/main/java/com/v3/newarchitecture/modules/MainApplicationTurboModuleManagerDelegate.java	/^  native boolean canCreateTurboModule(String moduleName);$/;"	m	class:MainApplicationTurboModuleManagerDelegate
+canCreateTurboModule	android/app/src/main/jni/MainApplicationTurboModuleManagerDelegate.cpp	/^bool MainApplicationTurboModuleManagerDelegate::canCreateTurboModule($/;"	f	class:facebook::react::MainApplicationTurboModuleManagerDelegate	typeref:typename:bool
+characteristic	uitls.js	/^    const characteristic = characteristics.find((characteristic) => characteristic.properties.Wr/;"	C
+characteristics	uitls.js	/^    const characteristics = peripheralInfo.characteristics;$/;"	C
+com.v3	android/app/src/debug/java/com/v3/ReactNativeFlipper.java	/^package com.v3;$/;"	p
+com.v3	android/app/src/main/java/com/v3/MainActivity.java	/^package com.v3;$/;"	p
+com.v3	android/app/src/main/java/com/v3/MainApplication.java	/^package com.v3;$/;"	p
+com.v3.newarchitecture	android/app/src/main/java/com/v3/newarchitecture/MainApplicationReactNativeHost.java	/^package com.v3.newarchitecture;$/;"	p
+com.v3.newarchitecture.components	android/app/src/main/java/com/v3/newarchitecture/components/MainComponentsRegistry.java	/^package com.v3.newarchitecture.components;$/;"	p
+com.v3.newarchitecture.modules	android/app/src/main/java/com/v3/newarchitecture/modules/MainApplicationTurboModuleManagerDelegate.java	/^package com.v3.newarchitecture.modules;$/;"	p
+componentDidMount	App.js	/^  componentDidMount() {$/;"	m	class:App
+concurrentRootEnabled	ios/v3/AppDelegate.mm	/^{$/;"	m	implementation:AppDelegate
+connectToDevice	App.js	/^  connectToDevice(device) {$/;"	m	class:App
+createReactActivityDelegate	android/app/src/main/java/com/v3/MainActivity.java	/^  protected ReactActivityDelegate createReactActivityDelegate() {$/;"	m	class:MainActivity
+createRootView	android/app/src/main/java/com/v3/MainActivity.java	/^    protected ReactRootView createRootView() {$/;"	m	class:MainActivity.MainActivityDelegate
+currentDevice	App.js	/^          this.setState({ currentDevice: device });$/;"	p	variable:anonymousObjecta7a74a510305
+device	App.js	/^                key={device.id}$/;"	M	variable:
+deviceConnectionInfo	App.js	/^              deviceConnectionInfo:$/;"	p	variable:anonymousObjecta7a74a510405
+devices	App.js	/^          this.setState({ devices: [...this.state.devices] });$/;"	p	variable:anonymousObjecta7a74a510105
+die	android/gradlew	/^die () {$/;"	f
+distributionBase	android/gradle/wrapper/gradle-wrapper.properties	/^distributionBase=GRADLE_USER_HOME$/;"	k
+distributionPath	android/gradle/wrapper/gradle-wrapper.properties	/^distributionPath=wrapper\/dists$/;"	k
+distributionUrl	android/gradle/wrapper/gradle-wrapper.properties	/^distributionUrl=https\\:\/\/services.gradle.org\/distributions\/gradle-7.5.1-all.zip$/;"	k
+end	android/gradlew.bat	/^:end$/;"	l
+execute	android/gradlew.bat	/^:execute$/;"	l
+experimentalImportSupport	metro.config.js	/^        experimentalImportSupport: false,$/;"	p	property:module.exports.transformer.anonymousObject5532de9b0105.transform
+facebook	android/app/src/main/jni/MainApplicationModuleProvider.cpp	/^namespace facebook {$/;"	n	file:
+facebook	android/app/src/main/jni/MainApplicationModuleProvider.h	/^namespace facebook {$/;"	n
+facebook	android/app/src/main/jni/MainApplicationTurboModuleManagerDelegate.cpp	/^namespace facebook {$/;"	n	file:
+facebook	android/app/src/main/jni/MainApplicationTurboModuleManagerDelegate.h	/^namespace facebook {$/;"	n
+facebook	android/app/src/main/jni/MainComponentsRegistry.cpp	/^namespace facebook {$/;"	n	file:
+facebook	android/app/src/main/jni/MainComponentsRegistry.h	/^namespace facebook {$/;"	n
+fail	android/gradlew.bat	/^:fail$/;"	l
+findJavaFromJavaHome	android/gradlew.bat	/^:findJavaFromJavaHome$/;"	l
+findSubviewInView:matching:	ios/v3Tests/v3Tests.m	/^{$/;"	m	implementation:v3Tests
+getJSIModulePackage	android/app/src/main/java/com/v3/newarchitecture/MainApplicationReactNativeHost.java	/^  protected JSIModulePackage getJSIModulePackage() {$/;"	m	class:MainApplicationReactNativeHost
+getJSMainModuleName	android/app/src/main/java/com/v3/newarchitecture/MainApplicationReactNativeHost.java	/^  protected String getJSMainModuleName() {$/;"	m	class:MainApplicationReactNativeHost
+getMainComponentName	android/app/src/main/java/com/v3/MainActivity.java	/^  protected String getMainComponentName() {$/;"	m	class:MainActivity
+getMessage	App.js	/^  getMessage = () => {$/;"	M	class:App
+getModuleClassFromName:	ios/v3/AppDelegate.mm	/^{$/;"	m	implementation:AppDelegate
+getModuleInstanceFromClass:	ios/v3/AppDelegate.mm	/^{$/;"	m	implementation:AppDelegate
+getPackages	android/app/src/main/java/com/v3/newarchitecture/MainApplicationReactNativeHost.java	/^  protected List<ReactPackage> getPackages() {$/;"	m	class:MainApplicationReactNativeHost
+getReactNativeHost	android/app/src/main/java/com/v3/MainApplication.java	/^  public ReactNativeHost getReactNativeHost() {$/;"	m	class:MainApplication
+getReactPackageTurboModuleManagerDelegateBuilder	android/app/src/main/java/com/v3/newarchitecture/MainApplicationReactNativeHost.java	/^      getReactPackageTurboModuleManagerDelegateBuilder() {$/;"	m	class:MainApplicationReactNativeHost
+getServiceAndCharacteristics	uitls.js	/^export const getServiceAndCharacteristics = (peripheralInfo) => {$/;"	f
+getTurboModule	android/app/src/main/jni/MainApplicationTurboModuleManagerDelegate.cpp	/^MainApplicationTurboModuleManagerDelegate::getTurboModule($/;"	f	class:facebook::react::MainApplicationTurboModuleManagerDelegate	typeref:typename:std::shared_ptr<TurboModule>
+getTurboModule:initParams:	ios/v3/AppDelegate.mm	/^{$/;"	m	implementation:AppDelegate
+getTurboModule:jsInvoker:	ios/v3/AppDelegate.mm	/^{$/;"	m	implementation:AppDelegate
+getUseDeveloperSupport	android/app/src/main/java/com/v3/newarchitecture/MainApplicationReactNativeHost.java	/^  public boolean getUseDeveloperSupport() {$/;"	m	class:MainApplicationReactNativeHost
+id}	App.js	/^              <Text>{`Connected to: ${this.state.currentDevice.id}`}<\/Text>$/;"	M	class:Connected to: ${this.state.currentDevice
+initHybrid	android/app/src/main/java/com/v3/newarchitecture/components/MainComponentsRegistry.java	/^  private native HybridData initHybrid(ComponentFactory componentFactory);$/;"	m	class:MainComponentsRegistry	file:
+initHybrid	android/app/src/main/java/com/v3/newarchitecture/modules/MainApplicationTurboModuleManagerDelegate.java	/^  protected native HybridData initHybrid();$/;"	m	class:MainApplicationTurboModuleManagerDelegate
+initHybrid	android/app/src/main/jni/MainApplicationTurboModuleManagerDelegate.cpp	/^MainApplicationTurboModuleManagerDelegate::initHybrid($/;"	f	class:facebook::react::MainApplicationTurboModuleManagerDelegate	typeref:typename:jni::local_ref<MainApplicationTurboModuleManagerDelegate::jhybriddata>
+initHybrid	android/app/src/main/jni/MainComponentsRegistry.cpp	/^MainComponentsRegistry::initHybrid($/;"	f	class:facebook::react::MainComponentsRegistry	typeref:typename:jni::local_ref<MainComponentsRegistry::jhybriddata>
+initializeFlipper	android/app/src/debug/java/com/v3/ReactNativeFlipper.java	/^  public static void initializeFlipper(Context context, ReactInstanceManager reactInstanceManage/;"	m	class:ReactNativeFlipper
+initializeFlipper	android/app/src/main/java/com/v3/MainApplication.java	/^  private static void initializeFlipper($/;"	m	class:MainApplication	file:
+inlineRequires	metro.config.js	/^        inlineRequires: true,$/;"	p	property:module.exports.transformer.anonymousObject5532de9b0105.transform
+isConcurrentRootEnabled	android/app/src/main/java/com/v3/MainActivity.java	/^    protected boolean isConcurrentRootEnabled() {$/;"	m	class:MainActivity.MainActivityDelegate
+isConnectable ? 'connectable' : 'not connectable' }	App.js	/^                  }`}<\/Text>$/;"	M	class:${device.id}: ${device.advertising
+jsExecutorFactoryForBridge:	ios/v3/AppDelegate.mm	/^{$/;"	m	implementation:AppDelegate
+kJavaDescriptor	android/app/src/main/jni/MainApplicationTurboModuleManagerDelegate.h	/^  static constexpr auto kJavaDescriptor =$/;"	m	class:facebook::react::MainApplicationTurboModuleManagerDelegate	typeref:typename:auto
+kJavaDescriptor	android/app/src/main/jni/MainComponentsRegistry.h	/^  constexpr static auto kJavaDescriptor =$/;"	m	class:facebook::react::MainComponentsRegistry	typeref:typename:auto
+localhost	ios/v3/Info.plist	/^			<key>localhost<\/key>$/;"	k	key:NSAppTransportSecurity.NSExceptionDomains
+mHybridData	android/app/src/main/java/com/v3/newarchitecture/components/MainComponentsRegistry.java	/^  @DoNotStrip private final HybridData mHybridData;$/;"	f	class:MainComponentsRegistry	file:
+mNewArchitectureNativeHost	android/app/src/main/java/com/v3/MainApplication.java	/^  private final ReactNativeHost mNewArchitectureNativeHost =$/;"	f	class:MainApplication	file:
+mReactNativeHost	android/app/src/main/java/com/v3/MainApplication.java	/^  private final ReactNativeHost mReactNativeHost =$/;"	f	class:MainApplication	file:
+main	ios/v3/main.m	/^int main(int argc, char *argv[])$/;"	f
+mainEnd	android/gradlew.bat	/^:mainEnd$/;"	l
+maybeLoadOtherSoLibraries	android/app/src/main/java/com/v3/newarchitecture/modules/MainApplicationTurboModuleManagerDelegate.java	/^  protected synchronized void maybeLoadOtherSoLibraries() {$/;"	m	class:MainApplicationTurboModuleManagerDelegate
+module.exports	babel.config.js	/^module.exports = {$/;"	p
+module.exports	metro.config.js	/^module.exports = {$/;"	p
+newArchEnabled	android/gradle.properties	/^newArchEnabled=false$/;"	k
+omega	android/gradlew.bat	/^:omega$/;"	l
+onCreate	android/app/src/main/java/com/v3/MainApplication.java	/^  public void onCreate() {$/;"	m	class:MainApplication
+onPress	App.js	/^            onPress={() => BleManager.stopScan()}$/;"	M	class:App
+onPress	App.js	/^            onPress={() => this.startScanning()}$/;"	M	class:App
+org.gradle.jvmargs	android/gradle.properties	/^org.gradle.jvmargs=-Xmx2048m -XX:MaxMetaspaceSize=512m$/;"	k
+prepareInitialProps	ios/v3/AppDelegate.mm	/^{$/;"	m	implementation:AppDelegate
+presets	babel.config.js	/^  presets: ['module:metro-react-native-babel-preset'],$/;"	p	property:module.exports
+react	android/app/src/main/jni/MainApplicationModuleProvider.cpp	/^namespace react {$/;"	n	namespace:facebook	file:
+react	android/app/src/main/jni/MainApplicationModuleProvider.h	/^namespace react {$/;"	n	namespace:facebook
+react	android/app/src/main/jni/MainApplicationTurboModuleManagerDelegate.cpp	/^namespace react {$/;"	n	namespace:facebook	file:
+react	android/app/src/main/jni/MainApplicationTurboModuleManagerDelegate.h	/^namespace react {$/;"	n	namespace:facebook
+react	android/app/src/main/jni/MainComponentsRegistry.cpp	/^namespace react {$/;"	n	namespace:facebook	file:
+react	android/app/src/main/jni/MainComponentsRegistry.h	/^namespace react {$/;"	n	namespace:facebook
+reactNativeArchitectures	android/gradle.properties	/^reactNativeArchitectures=armeabi-v7a,arm64-v8a,x86,x86_64$/;"	k
+readMessage}	App.js	/^              <Text>{`Message received: ${this.state.readMessage}`}<\/Text>$/;"	M	class:Message received: ${this.state
+register	android/app/src/main/java/com/v3/newarchitecture/components/MainComponentsRegistry.java	/^  public static MainComponentsRegistry register(ComponentFactory componentFactory) {$/;"	m	class:MainComponentsRegistry
+registerNatives	android/app/src/main/jni/MainApplicationTurboModuleManagerDelegate.cpp	/^void MainApplicationTurboModuleManagerDelegate::registerNatives() {$/;"	f	class:facebook::react::MainApplicationTurboModuleManagerDelegate	typeref:typename:void
+registerNatives	android/app/src/main/jni/MainComponentsRegistry.cpp	/^void MainComponentsRegistry::registerNatives() {$/;"	f	class:facebook::react::MainComponentsRegistry	typeref:typename:void
+render	App.js	/^  render() {$/;"	m	class:App
+sIsSoLibraryLoaded	android/app/src/main/java/com/v3/newarchitecture/modules/MainApplicationTurboModuleManagerDelegate.java	/^  private static volatile boolean sIsSoLibraryLoaded;$/;"	f	class:MainApplicationTurboModuleManagerDelegate	file:
+scanner	App.js	/^          <Text>Bluetooth scanner<\/Text>$/;"	M	class:App
+sendMessage	App.js	/^  sendMessage = () => {$/;"	M	class:App
+sharedProviderRegistry	android/app/src/main/jni/MainComponentsRegistry.cpp	/^MainComponentsRegistry::sharedProviderRegistry() {$/;"	f	class:facebook::react::MainComponentsRegistry	typeref:typename:std::shared_ptr<ComponentDescriptorProviderRegistry const>
+showAlert	App.js	/^    BleManager.start({ showAlert: false }).then(() => {$/;"	p	variable:anonymousObjecta7a74a510205
+sourceURLForBridge:	ios/v3/AppDelegate.mm	/^{$/;"	m	implementation:AppDelegate
+startScanning	App.js	/^  startScanning() {$/;"	m	class:App
+state	App.js	/^  state = {$/;"	M	class:App
+style	App.js	/^            style={{ marginBottom: 5 }}$/;"	M	class:App
+testRendersWelcomeScreen	ios/v3Tests/v3Tests.m	/^{$/;"	m	implementation:v3Tests
+title	App.js	/^            title="Start scanning"$/;"	M	class:App
+title	App.js	/^            title="Stop scanning"$/;"	M	class:App
+tools	android/app/src/debug/AndroidManifest.xml	/^    xmlns:tools="http:\/\/schemas.android.com\/tools">$/;"	n	uri:http://schemas.android.com/tools
+transform	metro.config.js	/^      transform: {$/;"	p	variable:module.exports.transformer.anonymousObject5532de9b0105
+transformer	metro.config.js	/^  transformer: {$/;"	p	property:module.exports
+v3Tests	ios/v3Tests/v3Tests.m	/^@implementation v3Tests$/;"	I
+v3Tests	ios/v3Tests/v3Tests.m	/^@interface v3Tests : XCTestCase$/;"	i
+v3_appmodules	android/app/src/main/jni/CMakeLists.txt	/^project(v3_appmodules)$/;"	p
+warn	android/gradlew	/^warn () {$/;"	f
+window	ios/v3/AppDelegate.h	/^@property (nonatomic, strong) UIWindow *window;$/;"	p	interface:AppDelegate
+writeMessage	App.js	/^                  this.setState({ writeMessage })$/;"	M	variable:
+zipStoreBase	android/gradle/wrapper/gradle-wrapper.properties	/^zipStoreBase=GRADLE_USER_HOME$/;"	k
+zipStorePath	android/gradle/wrapper/gradle-wrapper.properties	/^zipStorePath=wrapper\/dists$/;"	k
