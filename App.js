@@ -136,7 +136,7 @@ export default class App extends Component {
           {!this.state.currentDevice ? (
             this.state.devices.map((device) => (
               <TouchableOpacity
-                style={{ padding: 10, margin: 5, backgroundColor: '#000' }}
+                style={{ padding: 10, margin: 5, backgroundColor: '#cccbcb' }}
                 key={device.id}
                 onPress={() => this.connectToDevice(device)}
               >
