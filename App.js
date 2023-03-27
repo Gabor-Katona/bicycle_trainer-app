@@ -30,11 +30,28 @@ export default class App extends Component {
   sendMessage = () => {
     const { currentDevice, deviceConnectionInfo } = this.state;
     const { id } = currentDevice;
-    BleManager.write(id, ...deviceConnectionInfo, stringToBytes(this.state.writeMessage))
-      .then(() => {
-        alert("Success!")
-      })
-      .catch((error) => alert(`Error: ${error}`))
+    console.log(id);
+    console.log(currentDevice);
+    console.log(deviceConnectionInfo);
+
+    const deviceConnectionRead = ["e093f3b5-00a3-a9e5-9eca-40016e0edc24", "e093f3b6-00a3-a9e5-9eca-40026e0edc24"];
+    console.log(deviceConnectionRead);
+    let resp = BleManager.write(id, ...deviceConnectionInfo, stringToBytes(this.state.writeMessage));
+    resp.then(
+      function (value) {
+        BleManager.read(id, ...deviceConnectionRead)
+          .then((readData) => {
+            const buffer = Buffer.from(readData);   //https://github.com/feross/buffer#convert-arraybuffer-to-buffer
+            alert(buffer.toString())
+          })
+          .catch((error) => {
+            alert(error);
+          });
+      },
+      function (error) {
+        console.log("error", error);
+      }
+    );
   }
 
   getMessage = () => {
