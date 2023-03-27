@@ -25,24 +25,25 @@ export default class App extends Component {
     deviceConnectionInfo: [],
     writeMessage: "",
     readMessage: "",
+    intervalId: null,
+    startTime: 0,
   };
 
   sendMessage = () => {
     const { currentDevice, deviceConnectionInfo } = this.state;
     const { id } = currentDevice;
-    console.log(id);
-    console.log(currentDevice);
-    console.log(deviceConnectionInfo);
 
     const deviceConnectionRead = ["e093f3b5-00a3-a9e5-9eca-40016e0edc24", "e093f3b6-00a3-a9e5-9eca-40026e0edc24"];
-    console.log(deviceConnectionRead);
-    let resp = BleManager.write(id, ...deviceConnectionInfo, stringToBytes(this.state.writeMessage));
+    //let resp = BleManager.write(id, ...deviceConnectionInfo, stringToBytes(this.state.writeMessage));
+    let resp = BleManager.write(id, ...deviceConnectionInfo, stringToBytes("E/EV/D"));
+
     resp.then(
       function (value) {
         BleManager.read(id, ...deviceConnectionRead)
           .then((readData) => {
             const buffer = Buffer.from(readData);   //https://github.com/feross/buffer#convert-arraybuffer-to-buffer
-            alert(buffer.toString())
+            //alert(buffer.toString())
+            console.log(buffer.toString());
           })
           .catch((error) => {
             alert(error);
@@ -126,12 +127,36 @@ export default class App extends Component {
               deviceConnectionInfo:
                 getServiceAndCharacteristics(peripheralInfo),
             });
+          })
+          .then(() => {
+            const id = setInterval(() => {
+              
+              let now = new Date().getTime();
+              console.log(now - this.state.startTime );
+              this.sendMessage()
+              this.setState({ startTime: now });
+
+            }, 250);
+            this.setState({ intervalId: id });
           });
         })
         .catch((error) => alert(`Error: ${error}`));
     } else {
       alert('Device is not connectable');
     }
+  }
+
+  startInterval = () => {
+    const id = setInterval(() => {
+      console.log("Interval");
+    }, 1000);
+    this.setState({ intervalId: id });
+  }
+
+  stopInterval = () => {
+    clearInterval(this.state.intervalId);
+    this.setState({ intervalId: null });
+    console.log("interval cleared");
   }
 
   render() {
@@ -147,6 +172,11 @@ export default class App extends Component {
           <Button
             onPress={() => BleManager.stopScan()}
             title="Stop scanning"
+            style={{ marginBottom: 5 }}
+          />
+          <Button
+            onPress={() => this.stopInterval()}
+            title="Stop Interval"
             style={{ marginBottom: 5 }}
           />
 
