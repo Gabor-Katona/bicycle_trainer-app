@@ -15,7 +15,8 @@
     "convert-string": "^0.1.0",
     "react": "18.1.0",
     "react-native": "0.70.6",
-    "react-native-ble-manager": "^8.4.4"
+    "react-native-ble-manager": "^8.4.4",
+    "react-native-sqlite-storage": "^6.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
