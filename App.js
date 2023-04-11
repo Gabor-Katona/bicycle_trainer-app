@@ -31,12 +31,11 @@ export default class App extends Component {
       deviceConnectionInfo: [],
       writeMessage: "",
       readMessage: "",
-      interval1Id: null,
-      interval2Id: null,
+      intervalId: null,
       lastEnvId: 1,
       lastGyro: null,
       requestCount: 0,
-      newRequest: true,
+      measurementStarted: false,
       startTime: 0,
     };
 
@@ -49,14 +48,14 @@ export default class App extends Component {
       error => { console.log(error) }
     );
 
-    this.dropTables(); 
+    this.dropTables();
     this.createTable1();
     this.createTable2();
     this.createTable3();
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.requestCount !== this.state.requestCount) {
+    if (prevState.requestCount !== this.state.requestCount && this.state.measurementStarted) {
       if (this.state.requestCount > 5) {
         this.sendMessage(1);
         console.log("deleted count");
@@ -128,7 +127,7 @@ export default class App extends Component {
     const { currentDevice, deviceConnectionInfo } = this.state;
     const { id } = currentDevice;
     const deviceConnectionRead = ["e093f3b5-00a3-a9e5-9eca-40016e0edc24", "e093f3b6-00a3-a9e5-9eca-40026e0edc24"];
-    
+
     // let resp = BleManager.write(id, ...deviceConnectionInfo, stringToBytes(this.state.writeMessage));
     let resp
     //enviromental sensor request
@@ -236,10 +235,6 @@ export default class App extends Component {
     BleManager.scan([], 12);
   }
 
-  async firstRequest() {
-    //this.sendMessage(1);
-  }
-
   connectToDevice(device) {
     if (device.advertising.isConnectable) {
       BleManager.connect(device.id)
@@ -252,13 +247,13 @@ export default class App extends Component {
                 getServiceAndCharacteristics(peripheralInfo),
             });
           })
-            .then(() => {
-              this.sendMessage(1);
-              const id2 = setInterval(() => {
-                this.sendMessage(2);
-              }, 500);
-              this.setState({ interval2Id: id2 });
-            })
+          /*.then(() => {
+            this.sendMessage(1);
+            const id = setInterval(() => {
+              this.sendMessage(2);
+            }, 500);
+            this.setState({ intervalId: id });
+          })*/
         })
         .catch((error) => (`Error: ${error}`));
     } else {
@@ -270,14 +265,12 @@ export default class App extends Component {
     const id = setInterval(() => {
       console.log("Interval");
     }, 1000);
-    this.setState({ interval1Id: id });
+    this.setState({ intervalId: id });
   }
 
   stopInterval = () => {
-    clearInterval(this.state.interval1Id);
-    clearInterval(this.state.interval2Id);
-    this.setState({ interval1Id: null });
-    this.setState({ interval2Id: null });
+    clearInterval(this.state.intervalId);
+    this.setState({ intervalId: null });
     console.log("interval cleared");
   }
 
@@ -310,11 +303,11 @@ export default class App extends Component {
           await tx.executeSql(
             "INSERT INTO Movement (Gyroscope_x, Gyroscope_y, Gyroscope_z, "
             + "Accelerometer_x, Accelerometer_y, Accelerometer_z) VALUES (?,?,?,?,?,?)",
-            [parseInt(gyroParsed[0]), parseInt(gyroParsed[1]), parseInt(gyroParsed[2]), 
+            [parseInt(gyroParsed[0]), parseInt(gyroParsed[1]), parseInt(gyroParsed[2]),
             parseInt(acceloParsed[0]), parseInt(acceloParsed[1]), parseInt(acceloParsed[2])],
 
             (tx, results) => {
-              this.insertTimeData(this.state.lastEnvId, results.insertId); 
+              this.insertTimeData(this.state.lastEnvId, results.insertId);
             }
           );
         })
@@ -325,71 +318,82 @@ export default class App extends Component {
   }
 
   insertTimeData = async (idEnviromental, idMovement) => {
-      try {
-        await db.transaction(async (tx) => {
-          await tx.executeSql(
-            "INSERT INTO Time (Enviromental_id, Movement_id, Time) VALUES (?,?," 
-            + " STRFTIME('%Y-%m-%d %H:%M:%f', 'NOW' ,'localtime'))",
-            [parseInt(idEnviromental), parseInt(idMovement)],
-          );
-        })
-      } catch (error) {
-        console.log(error);
-      }
+    try {
+      await db.transaction(async (tx) => {
+        await tx.executeSql(
+          "INSERT INTO Time (Enviromental_id, Movement_id, Time) VALUES (?,?,"
+          + " STRFTIME('%Y-%m-%d %H:%M:%f', 'NOW' ,'localtime'))",
+          [parseInt(idEnviromental), parseInt(idMovement)],
+        );
+      })
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  startNewMeasurement = () => {
+    this.setState({ requestCount: 0 });
+    this.setState({ measurementStarted: true });
+    this.sendMessage(1);
+    const id = setInterval(() => {
+      this.sendMessage(2);
+    }, 500);
+    this.setState({ intervalId: id });
+  }
+
+  stopMeasurement = () => {
+    this.stopInterval()
+    this.setState({ measurementStarted: false });
   }
 
   render() {
     return (
       <SafeAreaView style={{ padding: 50 }}>
         <ScrollView>
-          <Text>Bluetooth scanner</Text>
-          <Button
-            onPress={() => this.startScanning()}
-            title="Start scanning"
-            style={{ marginBottom: 5 }}
-          />
-          <Button
-            onPress={() => BleManager.stopScan()}
-            title="Stop scanning"
-            style={{ marginBottom: 5 }}
-          />
-          <Button
-            onPress={() => this.stopInterval()}
-            title="Stop Interval"
-            style={{ marginBottom: 5 }}
-          />
-
           {!this.state.currentDevice ? (
-            this.state.devices.map((device) => (
-              <TouchableOpacity
-                style={{ padding: 10, margin: 5, backgroundColor: '#cccbcb' }}
-                key={device.id}
-                onPress={() => this.connectToDevice(device)}
-              >
-                <Text>{`${device.id}: ${device.advertising.isConnectable
-                  ? 'connectable'
-                  : 'not connectable'
-                  }`}</Text>
-              </TouchableOpacity>
-            )
-            )) : (
             <>
+              <Text>Bluetooth scanner</Text>
               <Button
-                title={"Get a message"}
-                onPress={this.getMessage}
+                onPress={() => this.startScanning()}
+                title="Start scanning"
+                style={{ marginBottom: 5 }}
               />
               <Button
-                title={"Send a message"}
-                onPress={this.sendMessage}
+                onPress={() => BleManager.stopScan()}
+                title="Stop scanning"
+                style={{ marginBottom: 5 }}
               />
+              {this.state.devices.map((device) => (
+                <TouchableOpacity
+                  style={{ padding: 10, margin: 5, backgroundColor: '#cccbcb' }}
+                  key={device.id}
+                  onPress={() => this.connectToDevice(device)}
+                >
+                  <Text>{`${device.id}: ${device.advertising.isConnectable
+                    ? 'connectable'
+                    : 'not connectable'
+                    }`}</Text>
+                </TouchableOpacity>
+              ))
+              }
+            </>
+          ) : (
+            <>
+              {!this.state.measurementStarted ? (
+                <Button
+                  title={"Start measurement"}
+                  onPress={this.startNewMeasurement}
+                />
+              ) : (
+                <>
+                <Button
+                  title={"Stop measurement"}
+                  onPress={this.stopMeasurement}
+                />
+                <Text>{`Measurement in progress`}</Text>
+                </>
+              )}
               <Text>{`Connected to: ${this.state.currentDevice.id}`}</Text>
-              <TextInput
-                onChangeText={(writeMessage) =>
-                  this.setState({ writeMessage })
-                }
-                value={this.state.writeMessage}
-              />
-              <Text>{`Message received: ${this.state.readMessage}`}</Text>
             </>
           )}
         </ScrollView>
