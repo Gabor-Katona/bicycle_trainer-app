@@ -36,6 +36,8 @@ export default class App extends Component {
       lastGyro: null,
       requestCount: 0,
       measurementStarted: false,
+      measurementNumber: 0,
+      measurementPaused: false,
       startTime: 0,
     };
 
@@ -52,6 +54,8 @@ export default class App extends Component {
     this.createTable1();
     this.createTable2();
     this.createTable3();
+ 
+    this.setMeasurmentNumber();
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -97,7 +101,7 @@ export default class App extends Component {
     db.transaction((tx) => {
       tx.executeSql(
         "CREATE TABLE IF NOT EXISTS Time "
-        + "(Enviromental_id	INTEGER, Movement_id	INTEGER, Time	TEXT, "
+        + "(Enviromental_id	INTEGER, Movement_id	INTEGER, Time	TEXT, Measurement_number INTEGER, "
         + "FOREIGN KEY( Enviromental_id) REFERENCES Enviromental( Id ), "
         + "FOREIGN KEY( Movement_id) REFERENCES Movement( Id ), "
         + "PRIMARY KEY( Enviromental_id, Movement_id));"
@@ -321,9 +325,34 @@ export default class App extends Component {
     try {
       await db.transaction(async (tx) => {
         await tx.executeSql(
-          "INSERT INTO Time (Enviromental_id, Movement_id, Time) VALUES (?,?,"
-          + " STRFTIME('%Y-%m-%d %H:%M:%f', 'NOW' ,'localtime'))",
-          [parseInt(idEnviromental), parseInt(idMovement)],
+          "INSERT INTO Time (Enviromental_id, Movement_id, Time, Measurement_number) VALUES (?,?,"
+          + " STRFTIME('%Y-%m-%d %H:%M:%f', 'NOW' ,'localtime'), ?)",
+          [parseInt(idEnviromental), parseInt(idMovement), this.state.measurementNumber],
+        );
+      })
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  setMeasurmentNumber = async () => {
+    const self = this;    
+    try {
+      await db.transaction(async (tx) => {
+        await tx.executeSql(
+          "SELECT MAX(Measurement_number) AS Max FROM Time;",
+          [],
+          (tx, results) => {
+            var len = results.rows.length;
+            if (len > 0) {
+              let max = results.rows.item(0).Max;
+              if(max == null){
+                max = 0;
+              }
+              console.log("setMeasumentnum: "+ (max + 1) );
+              self.setState({ measurementNumber: (max + 1) });
+            }
+          }
         );
       })
     } catch (error) {
@@ -339,12 +368,30 @@ export default class App extends Component {
       this.sendMessage(2);
     }, 500);
     this.setState({ intervalId: id });
+    console.log("at start: " + this.state.measurementNumber);
   }
 
   stopMeasurement = () => {
     this.stopInterval()
     this.setState({ measurementStarted: false });
+    this.setState({ measurementNumber: this.state.measurementNumber + 1 });
   }
+
+  pauseMeasurement = () => {
+    this.stopInterval()
+    this.setState({ measurementPaused: true });
+  }
+
+  continueMeasurement = () => {
+    this.setState({ requestCount: 0 });
+    this.sendMessage(1);
+    const id = setInterval(() => {
+      this.sendMessage(2);
+    }, 500);
+    this.setState({ intervalId: id });
+    this.setState({ measurementPaused: false });
+  }
+
 
   render() {
     return (
@@ -386,11 +433,27 @@ export default class App extends Component {
                 />
               ) : (
                 <>
-                <Button
-                  title={"Stop measurement"}
-                  onPress={this.stopMeasurement}
-                />
-                <Text>{`Measurement in progress`}</Text>
+                  <Button
+                    title={"Stop measurement"}
+                    onPress={this.stopMeasurement}
+                  />
+                  {!this.state.measurementPaused ? (
+                    <>
+                      <Button
+                        title={"Pause measurement"}
+                        onPress={this.pauseMeasurement}
+                      />
+                      <Text>{`Measurement in progress`}</Text>
+                    </>
+                  ) : (
+                    <>
+                      <Button
+                        title={"Continue measurement"}
+                        onPress={this.continueMeasurement}
+                      />
+                      <Text>{`Measurement paused`}</Text>
+                    </>
+                  )}
                 </>
               )}
               <Text>{`Connected to: ${this.state.currentDevice.id}`}</Text>
