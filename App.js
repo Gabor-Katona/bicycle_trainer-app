@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import BleManager from 'react-native-ble-manager';
 import SQLite from 'react-native-sqlite-storage';
+import Geolocation from 'react-native-geolocation-service';
 import { stringToBytes } from "convert-string";
 import { Buffer } from "buffer";
 
@@ -32,6 +33,7 @@ export default class App extends Component {
       writeMessage: "",
       readMessage: "",
       intervalId: null,
+      interval2Id: null,
       lastEnvId: 1,
       lastGyro: null,
       requestCount: 0,
@@ -39,6 +41,7 @@ export default class App extends Component {
       measurementNumber: 0,
       measurementPaused: false,
       startTime: 0,
+      location: null,
     };
 
     db = SQLite.openDatabase(
@@ -54,7 +57,7 @@ export default class App extends Component {
     this.createTable1();
     this.createTable2();
     this.createTable3();
- 
+
     this.setMeasurmentNumber();
   }
 
@@ -71,6 +74,7 @@ export default class App extends Component {
       tx.executeSql(
         "CREATE TABLE IF NOT EXISTS Enviromental "
         + "(Id	INTEGER NOT NULL UNIQUE, Temperature	INTEGER, Humidity	INTEGER, Air_quality INTEGER, Pressure INTEGER, "
+        + "Latitude REAL, Longitude REAL, "
         + "PRIMARY KEY( Id AUTOINCREMENT));"
       )
     })
@@ -270,17 +274,23 @@ export default class App extends Component {
   stopInterval = () => {
     clearInterval(this.state.intervalId);
     this.setState({ intervalId: null });
+    clearInterval(this.state.interval2Id);
+    this.setState({ interval2Id: null });
     console.log("interval cleared");
   }
 
   insertEnvData = async (data) => {
+    const self = this;
     if (data[0] === "E") {
       let parsed = data.slice(2).split(",");
       try {
         await db.transaction(async (tx) => {
           await tx.executeSql(
-            "INSERT INTO Enviromental (Temperature, Humidity, Air_quality, Pressure) VALUES (?,?,?,?)",
-            [parseInt(parsed[0]), parseInt(parsed[1]), parseInt(parsed[2]), parseInt(parsed[3])],
+            "INSERT INTO Enviromental (Temperature, Humidity, Air_quality, Pressure, Latitude, "
+            + "Longitude) VALUES (?,?,?,?,?,?)",
+            [parseInt(parsed[0]), parseInt(parsed[1]), parseInt(parsed[2]), parseInt(parsed[3]),
+              (self.state.location ? self.state.location.coords.latitude : null),
+              (self.state.location ? self.state.location.coords.longitude : null)],
             (tx, results) => {
               console.log(results.insertId);
               this.setState({ lastEnvId: results.insertId });
@@ -320,8 +330,8 @@ export default class App extends Component {
     try {
       await db.transaction(async (tx) => {
         await tx.executeSql(
-          "INSERT INTO Time (Enviromental_id, Movement_id, Time, Measurement_number) VALUES (?,?,"
-          + " STRFTIME('%Y-%m-%d %H:%M:%f', 'NOW' ,'localtime'), ?)",
+          "INSERT INTO Time (Enviromental_id, Movement_id, Time, Measurement_number ) VALUES (?,?,"
+          + " STRFTIME('%Y-%m-%d %H:%M:%f', 'NOW' ,'localtime'), ? )",
           [parseInt(idEnviromental), parseInt(idMovement), this.state.measurementNumber],
         );
       })
@@ -331,7 +341,7 @@ export default class App extends Component {
   }
 
   setMeasurmentNumber = async () => {
-    const self = this;    
+    const self = this;
     try {
       await db.transaction(async (tx) => {
         await tx.executeSql(
@@ -341,10 +351,10 @@ export default class App extends Component {
             var len = results.rows.length;
             if (len > 0) {
               let max = results.rows.item(0).Max;
-              if(max == null){
+              if (max == null) {
                 max = 0;
               }
-              console.log("setMeasumentnum: "+ (max + 1) );
+              console.log("setMeasumentnum: " + (max + 1));
               self.setState({ measurementNumber: (max + 1) });
             }
           }
@@ -360,7 +370,7 @@ export default class App extends Component {
     this.setState({ measurementStarted: true });
     this.sendMessage(1);
     const id = setInterval(() => {
-      if (this.state.requestCount == 5) {
+      if (this.state.requestCount == 10) {
         this.sendMessage(1);
         console.log("deleted count");
         this.setState({ requestCount: 0 });;
@@ -371,6 +381,11 @@ export default class App extends Component {
     }, 500);
     this.setState({ intervalId: id });
     console.log("at start: " + this.state.measurementNumber);
+    // interval for GPS location
+    const id2 = setInterval(() => {
+      this.getLocation();
+    }, 2500);
+    this.setState({ interval2Id: id2 });
   }
 
   stopMeasurement = () => {
@@ -388,7 +403,7 @@ export default class App extends Component {
     this.setState({ requestCount: 0 });
     this.sendMessage(1);
     const id = setInterval(() => {
-      if (this.state.requestCount == 5) {
+      if (this.state.requestCount == 10) {
         this.sendMessage(1);
         console.log("deleted count");
         this.setState({ requestCount: 0 });;
@@ -399,6 +414,25 @@ export default class App extends Component {
     }, 500);
     this.setState({ intervalId: id });
     this.setState({ measurementPaused: false });
+
+    const id2 = setInterval(() => {
+      this.getLocation();
+    }, 2500);
+    this.setState({ interval2Id: id2 });
+  }
+
+  getLocation = () => {
+    self = this;
+    Geolocation.getCurrentPosition(
+      position => {
+        self.setState({ location: position });
+      },
+      error => {
+        self.setState({ location: null });
+      },
+      { enableHighAccuracy: true, timeout: 4000, maximumAge: 500 },
+    );
+    console.log(this.state.location);
   }
 
 
