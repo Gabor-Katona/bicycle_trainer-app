@@ -60,12 +60,7 @@ export default class App extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.requestCount !== this.state.requestCount && this.state.measurementStarted) {
-      if (this.state.requestCount > 5) {
-        this.sendMessage(1);
-        console.log("deleted count");
-        this.setState({ requestCount: 0 });
-      }
-      else if (this.state.requestCount != 0) {
+      if (this.state.requestCount != 0) {
         this.sendMessage(3);
       }
     }
@@ -365,7 +360,14 @@ export default class App extends Component {
     this.setState({ measurementStarted: true });
     this.sendMessage(1);
     const id = setInterval(() => {
-      this.sendMessage(2);
+      if (this.state.requestCount == 5) {
+        this.sendMessage(1);
+        console.log("deleted count");
+        this.setState({ requestCount: 0 });;
+      }
+      else {
+        this.sendMessage(2);
+      }
     }, 500);
     this.setState({ intervalId: id });
     console.log("at start: " + this.state.measurementNumber);
@@ -386,7 +388,14 @@ export default class App extends Component {
     this.setState({ requestCount: 0 });
     this.sendMessage(1);
     const id = setInterval(() => {
-      this.sendMessage(2);
+      if (this.state.requestCount == 5) {
+        this.sendMessage(1);
+        console.log("deleted count");
+        this.setState({ requestCount: 0 });;
+      }
+      else {
+        this.sendMessage(2);
+      }
     }, 500);
     this.setState({ intervalId: id });
     this.setState({ measurementPaused: false });
