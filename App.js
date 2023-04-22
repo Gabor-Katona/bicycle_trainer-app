@@ -14,6 +14,7 @@ import {
 import BleManager from 'react-native-ble-manager';
 import SQLite from 'react-native-sqlite-storage';
 import Geolocation from 'react-native-geolocation-service';
+import KeepAwake from 'react-native-keep-awake';
 import { stringToBytes } from "convert-string";
 import { Buffer } from "buffer";
 
@@ -366,6 +367,7 @@ export default class App extends Component {
   }
 
   startNewMeasurement = () => {
+    KeepAwake.activate();
     this.setState({ requestCount: 0 });
     this.setState({ measurementStarted: true });
     this.sendMessage(1);
@@ -389,17 +391,20 @@ export default class App extends Component {
   }
 
   stopMeasurement = () => {
+    KeepAwake.deactivate();
     this.stopInterval()
     this.setState({ measurementStarted: false });
     this.setState({ measurementNumber: this.state.measurementNumber + 1 });
   }
 
   pauseMeasurement = () => {
+    KeepAwake.deactivate();
     this.stopInterval()
     this.setState({ measurementPaused: true });
   }
 
   continueMeasurement = () => {
+    KeepAwake.activate();
     this.setState({ requestCount: 0 });
     this.sendMessage(1);
     const id = setInterval(() => {
