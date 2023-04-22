@@ -17,6 +17,7 @@ import Geolocation from 'react-native-geolocation-service';
 import KeepAwake from 'react-native-keep-awake';
 import { stringToBytes } from "convert-string";
 import { Buffer } from "buffer";
+import DatabaseManager from './src/DatabaseManager';
 
 import { getServiceAndCharacteristics } from "./uitls"
 
@@ -25,7 +26,6 @@ export default class App extends Component {
 
   constructor(props) {
     super(props);
-    insertEnvData = (data) => this.insertEnvData(data);
 
     this.state = {
       devices: [],
@@ -43,23 +43,18 @@ export default class App extends Component {
       measurementPaused: false,
       startTime: 0,
       location: null,
+      dbManager: new DatabaseManager(),
     };
 
-    db = SQLite.openDatabase(
-      {
-        name: 'MainDB',
-        location: 'default',
-      },
-      () => { },
-      error => { console.log(error) }
-    );
+    this.state.dbManager.dropTables();
+    this.state.dbManager.createTables();
 
-    this.dropTables();
-    this.createTable1();
-    this.createTable2();
-    this.createTable3();
+    this.state.dbManager.setMeasurmentNumber(this.handleUpdateState);
+  }
 
-    this.setMeasurmentNumber();
+
+  handleUpdateState = (newState) => {
+    this.setState(newState);
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -68,63 +63,6 @@ export default class App extends Component {
         this.sendMessage(3);
       }
     }
-  }
-
-  createTable1 = () => {
-    db.transaction((tx) => {
-      tx.executeSql(
-        "CREATE TABLE IF NOT EXISTS Enviromental "
-        + "(Id	INTEGER NOT NULL UNIQUE, Temperature	INTEGER, Humidity	INTEGER, Air_quality INTEGER, Pressure INTEGER, "
-        + "Latitude REAL, Longitude REAL, "
-        + "PRIMARY KEY( Id AUTOINCREMENT));"
-      )
-    })
-  }
-
-  createTable2 = () => {
-    db.transaction((tx) => {
-      tx.executeSql(
-        "CREATE TABLE IF NOT EXISTS Movement "
-        + "(Id	INTEGER NOT NULL UNIQUE, Gyroscope_x	INTEGER, Gyroscope_y	INTEGER, Gyroscope_z	INTEGER, "
-        + "Accelerometer_x	INTEGER, Accelerometer_y	INTEGER, Accelerometer_z	INTEGER, "
-        + "PRIMARY KEY( Id AUTOINCREMENT));"
-        + "CREATE TABLE IF NOT EXISTS Time "
-        + "(Enviromental_id	INTEGER, Movement_id	INTEGER, Time	TEXT, "
-        + "FOREIGN KEY( Enviromental_id) REFERENCES Enviromental( Id ), "
-        + "FOREIGN KEY( Movement_id) REFERENCES Movement( Id ), "
-        + "PRIMARY KEY( Enviromental_id, Movement_id));"
-      )
-    })
-  }
-
-  createTable3 = () => {
-    db.transaction((tx) => {
-      tx.executeSql(
-        "CREATE TABLE IF NOT EXISTS Time "
-        + "(Enviromental_id	INTEGER, Movement_id	INTEGER, Time	TEXT, Measurement_number INTEGER, "
-        + "FOREIGN KEY( Enviromental_id) REFERENCES Enviromental( Id ), "
-        + "FOREIGN KEY( Movement_id) REFERENCES Movement( Id ), "
-        + "PRIMARY KEY( Enviromental_id, Movement_id));"
-      )
-    })
-  }
-
-  dropTables = () => {
-    db.transaction((tx) => {
-      tx.executeSql(
-        "DROP TABLE Time;"
-      )
-    })
-    db.transaction((tx) => {
-      tx.executeSql(
-        "DROP TABLE Movement;"
-      )
-    })
-    db.transaction((tx) => {
-      tx.executeSql(
-        "DROP TABLE Enviromental;"
-      )
-    })
   }
 
   sendMessage = (mode) => {
@@ -155,7 +93,7 @@ export default class App extends Component {
             const buffer = Buffer.from(readData); //https://github.com/feross/buffer#convert-arraybuffer-to-buffer
             if (mode == 1) {
               console.log(buffer.toString());
-              this.insertEnvData(buffer.toString());
+              self.state.dbManager.insertEnvData(buffer.toString(), self.state, self.handleUpdateState);
             }
             if (mode == 2) {
               console.log("mode 2");
@@ -165,7 +103,7 @@ export default class App extends Component {
             }
             if (mode == 3) {
               console.log("id: " + self.state.lastEnvId + " ," + self.state.lastGyro + " " + buffer.toString())
-              self.insertMovmentData(self.state.lastGyro, buffer.toString());
+              self.state.dbManager.insertMovmentData(self.state.lastGyro, buffer.toString(), self.state);
             }
           })
           .catch((error) => {
@@ -280,92 +218,6 @@ export default class App extends Component {
     console.log("interval cleared");
   }
 
-  insertEnvData = async (data) => {
-    const self = this;
-    if (data[0] === "E") {
-      let parsed = data.slice(2).split(",");
-      try {
-        await db.transaction(async (tx) => {
-          await tx.executeSql(
-            "INSERT INTO Enviromental (Temperature, Humidity, Air_quality, Pressure, Latitude, "
-            + "Longitude) VALUES (?,?,?,?,?,?)",
-            [parseInt(parsed[0]), parseInt(parsed[1]), parseInt(parsed[2]), parseInt(parsed[3]),
-              (self.state.location ? self.state.location.coords.latitude : null),
-              (self.state.location ? self.state.location.coords.longitude : null)],
-            (tx, results) => {
-              console.log(results.insertId);
-              this.setState({ lastEnvId: results.insertId });
-            }
-          );
-        })
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  }
-
-  insertMovmentData = async (gyroData, acceloData) => {
-    if (gyroData[0] === "G" && acceloData[0] === "A") {
-      let gyroParsed = gyroData.slice(2).split(",");
-      let acceloParsed = acceloData.slice(2).split(",");
-      try {
-        await db.transaction(async (tx) => {
-          await tx.executeSql(
-            "INSERT INTO Movement (Gyroscope_x, Gyroscope_y, Gyroscope_z, "
-            + "Accelerometer_x, Accelerometer_y, Accelerometer_z) VALUES (?,?,?,?,?,?)",
-            [parseInt(gyroParsed[0]), parseInt(gyroParsed[1]), parseInt(gyroParsed[2]),
-            parseInt(acceloParsed[0]), parseInt(acceloParsed[1]), parseInt(acceloParsed[2])],
-
-            (tx, results) => {
-              this.insertTimeData(this.state.lastEnvId, results.insertId);
-            }
-          );
-        })
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  }
-
-  insertTimeData = async (idEnviromental, idMovement) => {
-    try {
-      await db.transaction(async (tx) => {
-        await tx.executeSql(
-          "INSERT INTO Time (Enviromental_id, Movement_id, Time, Measurement_number ) VALUES (?,?,"
-          + " STRFTIME('%Y-%m-%d %H:%M:%f', 'NOW' ,'localtime'), ? )",
-          [parseInt(idEnviromental), parseInt(idMovement), this.state.measurementNumber],
-        );
-      })
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  setMeasurmentNumber = async () => {
-    const self = this;
-    try {
-      await db.transaction(async (tx) => {
-        await tx.executeSql(
-          "SELECT MAX(Measurement_number) AS Max FROM Time;",
-          [],
-          (tx, results) => {
-            var len = results.rows.length;
-            if (len > 0) {
-              let max = results.rows.item(0).Max;
-              if (max == null) {
-                max = 0;
-              }
-              console.log("setMeasumentnum: " + (max + 1));
-              self.setState({ measurementNumber: (max + 1) });
-            }
-          }
-        );
-      })
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
   startNewMeasurement = () => {
     KeepAwake.activate();
     this.setState({ requestCount: 0 });
@@ -439,7 +291,6 @@ export default class App extends Component {
     );
     console.log(this.state.location);
   }
-
 
   render() {
     return (
