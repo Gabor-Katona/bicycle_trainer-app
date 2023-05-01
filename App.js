@@ -18,6 +18,7 @@ import { stringToBytes } from "convert-string";
 import { Buffer } from "buffer";
 import DatabaseManager from './src/DatabaseManager';
 import ConnectionHandlers from './src/components/ConnectionHandlers';
+import PauseStopComponent from './src/components/PauseStopComponent';
 
 import { getServiceAndCharacteristics } from "./uitls"
 
@@ -211,42 +212,6 @@ export default class App extends Component {
     this.setState({ interval2Id: id2 });
   }
 
-  stopMeasurement = () => {
-    KeepAwake.deactivate();
-    this.stopInterval()
-    this.setState({ measurementStarted: false });
-    this.setState({ measurementNumber: this.state.measurementNumber + 1 });
-  }
-
-  pauseMeasurement = () => {
-    KeepAwake.deactivate();
-    this.stopInterval()
-    this.setState({ measurementPaused: true });
-  }
-
-  continueMeasurement = () => {
-    KeepAwake.activate();
-    this.setState({ requestCount: 0 });
-    this.sendMessage(1);
-    const id = setInterval(() => {
-      if (this.state.requestCount == 10) {
-        this.sendMessage(1);
-        console.log("deleted count");
-        this.setState({ requestCount: 0 });;
-      }
-      else {
-        this.sendMessage(2);
-      }
-    }, 500);
-    this.setState({ intervalId: id });
-    this.setState({ measurementPaused: false });
-
-    const id2 = setInterval(() => {
-      this.getLocation();
-    }, 2500);
-    this.setState({ interval2Id: id2 });
-  }
-
   getLocation = () => {
     self = this;
     Geolocation.getCurrentPosition(
@@ -275,29 +240,8 @@ export default class App extends Component {
                   onPress={this.startNewMeasurement}
                 />
               ) : (
-                <>
-                  <Button
-                    title={"Stop measurement"}
-                    onPress={this.stopMeasurement}
-                  />
-                  {!this.state.measurementPaused ? (
-                    <>
-                      <Button
-                        title={"Pause measurement"}
-                        onPress={this.pauseMeasurement}
-                      />
-                      <Text>{`Measurement in progress`}</Text>
-                    </>
-                  ) : (
-                    <>
-                      <Button
-                        title={"Continue measurement"}
-                        onPress={this.continueMeasurement}
-                      />
-                      <Text>{`Measurement paused`}</Text>
-                    </>
-                  )}
-                </>
+                <PauseStopComponent updateState={this.handleUpdateState} state={this.state}
+                  sendMessage={this.sendMessage} getLocation={this.getLocation} />
               )}
               <Text>{`Connected to: ${this.state.currentDevice.id}`}</Text>
             </>
