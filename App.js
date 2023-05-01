@@ -12,12 +12,12 @@ import {
   PermissionsAndroid,
 } from 'react-native';
 import BleManager from 'react-native-ble-manager';
-import SQLite from 'react-native-sqlite-storage';
 import Geolocation from 'react-native-geolocation-service';
 import KeepAwake from 'react-native-keep-awake';
 import { stringToBytes } from "convert-string";
 import { Buffer } from "buffer";
 import DatabaseManager from './src/DatabaseManager';
+import ConnectionHandlers from './src/components/ConnectionHandlers';
 
 import { getServiceAndCharacteristics } from "./uitls"
 
@@ -172,37 +172,6 @@ export default class App extends Component {
     });
   }
 
-  startScanning() {
-    console.log('start scanning');
-    BleManager.scan([], 12);
-  }
-
-  connectToDevice(device) {
-    if (device.advertising.isConnectable) {
-      BleManager.connect(device.id)
-        .then(() => {
-          this.setState({ currentDevice: device });
-
-          BleManager.retrieveServices(device.id).then((peripheralInfo) => {
-            this.setState({
-              deviceConnectionInfo:
-                getServiceAndCharacteristics(peripheralInfo),
-            });
-          })
-          /*.then(() => {
-            this.sendMessage(1);
-            const id = setInterval(() => {
-              this.sendMessage(2);
-            }, 500);
-            this.setState({ intervalId: id });
-          })*/
-        })
-        .catch((error) => (`Error: ${error}`));
-    } else {
-      alert('Device is not connectable');
-    }
-  }
-
   startInterval = () => {
     const id = setInterval(() => {
       console.log("Interval");
@@ -297,32 +266,7 @@ export default class App extends Component {
       <SafeAreaView style={{ padding: 50 }}>
         <ScrollView>
           {!this.state.currentDevice ? (
-            <>
-              <Text>Bluetooth scanner</Text>
-              <Button
-                onPress={() => this.startScanning()}
-                title="Start scanning"
-                style={{ marginBottom: 5 }}
-              />
-              <Button
-                onPress={() => BleManager.stopScan()}
-                title="Stop scanning"
-                style={{ marginBottom: 5 }}
-              />
-              {this.state.devices.map((device) => (
-                <TouchableOpacity
-                  style={{ padding: 10, margin: 5, backgroundColor: '#cccbcb' }}
-                  key={device.id}
-                  onPress={() => this.connectToDevice(device)}
-                >
-                  <Text>{`${device.id}: ${device.advertising.isConnectable
-                    ? 'connectable'
-                    : 'not connectable'
-                    }`}</Text>
-                </TouchableOpacity>
-              ))
-              }
-            </>
+            <ConnectionHandlers bleManager={BleManager} updateState={this.handleUpdateState} devicesState={this.state.devices} />
           ) : (
             <>
               {!this.state.measurementStarted ? (
