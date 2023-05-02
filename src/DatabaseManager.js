@@ -158,4 +158,93 @@ export default class DatabaseManager {
             console.log(error);
         }
     }
+
+    getMeasurementNumbers = async (updateState) => {
+        var list = [];
+        try {
+            await db.transaction(async (tx) => {
+                await tx.executeSql(
+                    "SELECT DISTINCT Measurement_number FROM Time;",
+                    [],
+                    (tx, results) => {
+                        var len = results.rows.length;
+
+                        if (len != 0) {
+                            for (let i = 0; i < len; i++) {
+                                //console.log(results.rows.item(i).Measurement_number);
+                                list.push(results.rows.item(i).Measurement_number.toString());
+                            }
+                        }
+                        console.log(list);
+                        updateState({ measurementNum: list });
+                    }
+                );
+            })
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    getMeasurementByNumber = async (updateState, number) => {
+        var list = [];
+        try {
+            await db.transaction(async (tx) => {
+                // TODO Measurement_number not only 1
+                await tx.executeSql(
+                    "SELECT Time, Temperature, Humidity, Pressure, Latitude, Longitude, Gyroscope_x, Gyroscope_y, Gyroscope_z, "
+                    + "Accelerometer_x, Accelerometer_y, Accelerometer_z "
+                    + "FROM time INNER JOIN enviromental ON enviromental.Id = time.enviromental_id INNER JOIN movement ON movement.id = time.movement_id WHERE time.Measurement_number = (?);",
+                    [number],
+                    (tx, results) => {
+                        var len = results.rows.length;
+                        var temperatureL = [];
+                        var humidityL = [];
+                        var pressureL = [];
+                        var gyroXL = [];
+                        var gyroYL = [];
+                        var gyroZL = [];
+                        var accelXL = [];
+                        var accelYL = [];
+                        var accelZL = [];
+                        var dateL = [];
+                        var gpsL = [];
+
+                        if (len != 0) {
+                            for (let i = 0; i < len; i++) {
+                                temperatureL.push(results.rows.item(i).Temperature);
+                                humidityL.push(results.rows.item(i).Humidity);
+                                pressureL.push(results.rows.item(i).Pressure);
+                                gyroXL.push(results.rows.item(i).Gyroscope_x);
+                                gyroYL.push(results.rows.item(i).Gyroscope_y);
+                                gyroZL.push(results.rows.item(i).Gyroscope_z);
+                                accelXL.push(results.rows.item(i).Accelerometer_x);
+                                accelYL.push(results.rows.item(i).Accelerometer_y);
+                                accelZL.push(results.rows.item(i).Accelerometer_z);
+                                dateL.push(results.rows.item(i).Time);
+                                if(results.rows.item(i).Latitude != null){
+                                    gpsL.push([results.rows.item(i).Latitude, results.rows.item(i).Longitude]);
+                                }
+                                //TODO gps
+                            }
+                            updateState({ temperature: temperatureL });
+                            updateState({ humidity:  humidityL  });
+                            updateState({ pressure: pressureL });
+                            updateState({ gyroX: gyroXL });
+                            updateState({ gyroY: gyroYL });
+                            updateState({ gyroZ: gyroZL });
+                            updateState({ accelX: accelXL });
+                            updateState({ accelY: accelYL });
+                            updateState({ accelZ: accelZL });
+                            updateState({ date: dateL });
+                            updateState({ gps: gpsL });
+                        }
+
+                    }
+                );
+            })
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
 }

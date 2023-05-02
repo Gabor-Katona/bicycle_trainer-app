@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, Button, TouchableOpacity } from "react-native";
+import { Text, Button, TouchableOpacity, ScrollView } from "react-native";
 
 import { getServiceAndCharacteristics } from "./../../uitls"
 
@@ -34,7 +34,7 @@ class ConnectionHandlers extends React.Component {
 
     render() {
         return (
-            <>
+            <ScrollView>
                 <Text>Bluetooth scanner</Text>
                 <Button
                     onPress={() => this.startScanning()}
@@ -60,7 +60,7 @@ class ConnectionHandlers extends React.Component {
                     </TouchableOpacity>
                 ))
                 }
-            </>
+            </ScrollView>
         );
     }
 }

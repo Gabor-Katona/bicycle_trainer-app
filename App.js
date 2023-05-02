@@ -19,6 +19,7 @@ import { Buffer } from "buffer";
 import DatabaseManager from './src/DatabaseManager';
 import ConnectionHandlers from './src/components/ConnectionHandlers';
 import PauseStopComponent from './src/components/PauseStopComponent';
+import DataVisualizer from './src/components/DataVisualizer';
 
 import { getServiceAndCharacteristics } from "./uitls"
 
@@ -42,12 +43,13 @@ export default class App extends Component {
       measurementStarted: false,
       measurementNumber: 0,
       measurementPaused: false,
+      showDataMode: false,
       startTime: 0,
       location: null,
       dbManager: new DatabaseManager(),
     };
 
-    this.state.dbManager.dropTables();
+    //this.state.dbManager.dropTables();
     this.state.dbManager.createTables();
 
     this.state.dbManager.setMeasurmentNumber(this.handleUpdateState);
@@ -226,27 +228,52 @@ export default class App extends Component {
     console.log(this.state.location);
   }
 
+  showData = () => {
+    this.setState({ showDataMode: true });
+    this.setState({ measurementStarted: true });
+  }
+
   render() {
     return (
-      <SafeAreaView style={{ padding: 50 }}>
-        <ScrollView>
+      <SafeAreaView style={{ flex: 1}}>
           {!this.state.currentDevice ? (
-            <ConnectionHandlers bleManager={BleManager} updateState={this.handleUpdateState} devicesState={this.state.devices} />
+            <>
+              <View style={{ padding: 50}}>
+                <ConnectionHandlers bleManager={BleManager} updateState={this.handleUpdateState} devicesState={this.state.devices} />
+              </View>
+
+              {/* TODO delete after test */}
+              <DataVisualizer dbManager={this.state.dbManager} updateState={this.handleUpdateState} />
+            </>
           ) : (
             <>
               {!this.state.measurementStarted ? (
-                <Button
-                  title={"Start measurement"}
-                  onPress={this.startNewMeasurement}
-                />
+                <View style={{ padding: 50}}>
+                  <Button
+                    title={"Start measurement"}
+                    onPress={this.startNewMeasurement}
+                  />
+                  <Button
+                    title={"Show data"}
+                    onPress={this.showData}
+                  />
+                  <Text>{`Connected to: ${this.state.currentDevice.id}`}</Text>
+                </View>
               ) : (
-                <PauseStopComponent updateState={this.handleUpdateState} state={this.state}
-                  sendMessage={this.sendMessage} getLocation={this.getLocation} />
+                <>
+                  {!this.state.showDataMode ? (
+                    <View style={{ padding: 50}}>
+                      <PauseStopComponent updateState={this.handleUpdateState} state={this.state}
+                        sendMessage={this.sendMessage} getLocation={this.getLocation} />
+                      <Text>{`Connected to: ${this.state.currentDevice.id}`}</Text>
+                    </View>
+                  ) : (
+                    <DataVisualizer dbManager={this.state.dbManager} updateState={this.handleUpdateState} />
+                  )}
+                </>
               )}
-              <Text>{`Connected to: ${this.state.currentDevice.id}`}</Text>
             </>
           )}
-        </ScrollView>
       </SafeAreaView>
     );
   }
