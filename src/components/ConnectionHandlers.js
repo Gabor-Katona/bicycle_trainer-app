@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, Button, TouchableOpacity, ScrollView } from "react-native";
+import { Text, Button, TouchableOpacity, ScrollView, View } from "react-native";
 
 import { getServiceAndCharacteristics } from "./../../uitls"
 
@@ -34,18 +34,22 @@ class ConnectionHandlers extends React.Component {
 
     render() {
         return (
-            <ScrollView>
+            <ScrollView >
                 <Text>Bluetooth scanner</Text>
+                <View style={{ paddingBottom: 5 }}>
                 <Button
                     onPress={() => this.startScanning()}
                     title="Start scanning"
                     style={{ marginBottom: 5 }}
                 />
+                </View>
+                <View style={{  paddingBottom: 5 }}>
                 <Button
                     onPress={() => this.props.bleManager.stopScan()}
                     title="Stop scanning"
                     style={{ marginBottom: 5 }}
                 />
+                </View>
                 {this.props.devicesState.map((device) => (
                     <TouchableOpacity
                         style={{ padding: 10, margin: 5, backgroundColor: '#cccbcb' }}

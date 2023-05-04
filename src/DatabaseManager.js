@@ -185,6 +185,46 @@ export default class DatabaseManager {
         }
     }
 
+    getAltitude = (temperature, pressure) => {
+        var altitude = (8.31432 * (parseInt(temperature) + 273.15) * Math.log(pressure / 1013.25)) / - (9.80665 * 0.0289644);
+        //altitude = altitude.toFixed(2);
+        altitude = Math.round(altitude * 100) / 100
+        return altitude;
+    }
+
+    getTimeDiff = (date1, date2) => {
+        var prevDate = new Date(date1)
+        var prevSeconds = prevDate.getTime() / 1000;
+        var currDate = new Date(date2);
+        var currSeconds = currDate.getTime() / 1000;
+        return currSeconds - prevSeconds
+    }
+
+    getVelocity = (currentVelocity, acceleration, date1, date2) => {
+        var time = this.getTimeDiff(date1, date2)
+        return currentVelocity + (acceleration * time);
+    }
+
+    getEvenlySpacedElements = (numberList) => {
+        const length = numberList.length;
+        var result = [];
+        if (length > 10) {
+            const interval = Math.floor(length / 9);
+            for (let i = 0; i < length; i += interval) {
+                result.push(numberList[i].split(" ")[1]);
+                if (result.length === 10) {
+                    break;
+                }
+            }
+        }
+        else {
+            for (let i = 0; i < length; i += 1) {
+                result.push(numberList[i].split(" ")[1]);
+            }
+        }
+        return result;
+    }
+
     getMeasurementByNumber = async (updateState, number) => {
         var list = [];
         try {
@@ -200,43 +240,67 @@ export default class DatabaseManager {
                         var temperatureL = [];
                         var humidityL = [];
                         var pressureL = [];
-                        var gyroXL = [];
-                        var gyroYL = [];
-                        var gyroZL = [];
-                        var accelXL = [];
+                        //var gyroXL = [];
+                        //var gyroYL = [];
+                        //var gyroZL = [];
+                        //var accelXL = [];
                         var accelYL = [];
-                        var accelZL = [];
+                        //var accelZL = [];
                         var dateL = [];
                         var gpsL = [];
 
                         if (len != 0) {
                             for (let i = 0; i < len; i++) {
-                                temperatureL.push(results.rows.item(i).Temperature);
+                                temperatureL.push(results.rows.item(i).Temperature / 10);
                                 humidityL.push(results.rows.item(i).Humidity);
                                 pressureL.push(results.rows.item(i).Pressure);
-                                gyroXL.push(results.rows.item(i).Gyroscope_x);
-                                gyroYL.push(results.rows.item(i).Gyroscope_y);
-                                gyroZL.push(results.rows.item(i).Gyroscope_z);
-                                accelXL.push(results.rows.item(i).Accelerometer_x);
-                                accelYL.push(results.rows.item(i).Accelerometer_y);
-                                accelZL.push(results.rows.item(i).Accelerometer_z);
+                                //gyroXL.push(results.rows.item(i).Gyroscope_x / 10);
+                                //gyroYL.push(results.rows.item(i).Gyroscope_y / 10);
+                                //gyroZL.push(results.rows.item(i).Gyroscope_z / 10);
+                                //accelXL.push(results.rows.item(i).Accelerometer_x / 100);
+                                accelYL.push(results.rows.item(i).Accelerometer_y / 100);
+                                //accelZL.push(results.rows.item(i).Accelerometer_z / 100);
                                 dateL.push(results.rows.item(i).Time);
-                                if(results.rows.item(i).Latitude != null){
+                                //dateL.push(results.rows.item(i).Time.split(" ")[1]);
+                                if (results.rows.item(i).Latitude != null) {
                                     gpsL.push([results.rows.item(i).Latitude, results.rows.item(i).Longitude]);
                                 }
                                 //TODO gps
                             }
+
+                            let altitudeL = []
+                            for (var i = 0; i < len; i++) {
+                                let alt = this.getAltitude(temperatureL[i], pressureL[i]);
+                                altitudeL.push(alt);
+                            }
+
+                            var velocity = [0]
+                            var currVelY = 0
+                            for (var i = 1; i < len; i++) {
+                                var velY = this.getVelocity(currVelY, accelYL[i], dateL[i - 1], dateL[i])
+                                currVelY = velY
+                                velY *= 3.6
+                                //velY = velY.toFixed(2)
+                                velY = Math.round(velY * 100) / 100
+                                velocity.push(velY)
+                            }
+
+                            var times = this.getEvenlySpacedElements(dateL);
+
                             updateState({ temperature: temperatureL });
-                            updateState({ humidity:  humidityL  });
+                            updateState({ humidity: humidityL });
                             updateState({ pressure: pressureL });
-                            updateState({ gyroX: gyroXL });
-                            updateState({ gyroY: gyroYL });
-                            updateState({ gyroZ: gyroZL });
-                            updateState({ accelX: accelXL });
+                            //updateState({ gyroX: gyroXL });
+                            //updateState({ gyroY: gyroYL });
+                            //updateState({ gyroZ: gyroZL });
+                            //updateState({ accelX: accelXL });
                             updateState({ accelY: accelYL });
-                            updateState({ accelZ: accelZL });
-                            updateState({ date: dateL });
+                            //updateState({ accelZ: accelZL });
+                            updateState({ date: times });
                             updateState({ gps: gpsL });
+                            updateState({ day: results.rows.item(0).Time.split(" ")[0] });
+                            updateState({ altitude: altitudeL });
+                            updateState({ speed: velocity });
                         }
 
                     }
