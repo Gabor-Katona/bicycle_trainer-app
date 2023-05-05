@@ -20,6 +20,7 @@ import DatabaseManager from './src/DatabaseManager';
 import ConnectionHandlers from './src/components/ConnectionHandlers';
 import PauseStopComponent from './src/components/PauseStopComponent';
 import DataVisualizer from './src/components/DataVisualizer';
+import DeleteScreen from './src/components/DeleteScreen';
 
 import { getServiceAndCharacteristics } from "./uitls"
 
@@ -48,6 +49,7 @@ export default class App extends Component {
       startTime: 0,
       location: null,
       dbManager: new DatabaseManager(),
+      deleteMode: false,
     };
 
     //this.state.dbManager.dropTables();
@@ -240,6 +242,10 @@ export default class App extends Component {
     this.setState({ measurementStarted: true });
   }
 
+  deleteData = () => {
+    this.setState({ deleteMode: true });
+  }
+
   render() {
     return (
       <SafeAreaView style={{ flex: 1 }}>
@@ -263,17 +269,29 @@ export default class App extends Component {
         ) : (
           <>
             {!this.state.measurementStarted ? (
-              <View style={{ padding: 50 }}>
-                <Button
-                  title={"Start measurement"}
-                  onPress={this.startNewMeasurement}
-                />
-                <Button
-                  title={"Show data"}
-                  onPress={this.showData}
-                />
-                <Text>{`Connected to: ${this.state.currentDevice.id}`}</Text>
-              </View>
+              <>
+                {!this.state.deleteMode ? (
+                  <View style={{ padding: 50 }}>
+                    <Button
+                      title={"Start measurement"}
+                      onPress={this.startNewMeasurement}
+                    />
+                    <View style={{ paddingVertical: 5 }}>
+                      <Button
+                        title={"Delete data"}
+                        onPress={this.deleteData}
+                      />
+                    </View>
+                    <Button
+                      title={"Show data"}
+                      onPress={this.showData}
+                    />
+                    <Text>{`Connected to: ${this.state.currentDevice.id}`}</Text>
+                  </View>
+                ) : (
+                  <DeleteScreen dbManager={this.state.dbManager} updateState={this.handleUpdateState}/>
+                )}
+              </>
             ) : (
               <>
                 {!this.state.showDataMode ? (
