@@ -301,6 +301,9 @@ export default class DatabaseManager {
                             updateState({ day: results.rows.item(0).Time.split(" ")[0] });
                             updateState({ altitude: altitudeL });
                             updateState({ speed: velocity });
+
+                            updateState({waitData: false });
+                            updateState({showData: true });
                         }
 
                     }

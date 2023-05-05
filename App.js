@@ -42,6 +42,7 @@ export default class App extends Component {
       requestCount: 0,
       measurementStarted: false,
       measurementNumber: 0,
+      showMeasurementNum: false,
       measurementPaused: false,
       showDataMode: false,
       startTime: 0,
@@ -194,6 +195,9 @@ export default class App extends Component {
     KeepAwake.activate();
     this.setState({ requestCount: 0 });
     this.setState({ measurementStarted: true });
+    const time = new Date();
+    this.setState({ timerStart: time });
+
     this.sendMessage(1);
     const id = setInterval(() => {
       if (this.state.requestCount == 10) {
@@ -207,11 +211,13 @@ export default class App extends Component {
     }, 500);
     this.setState({ intervalId: id });
     console.log("at start: " + this.state.measurementNumber);
+
     // interval for GPS location
     const id2 = setInterval(() => {
       this.getLocation();
     }, 2500);
     this.setState({ interval2Id: id2 });
+    this.setState({ showMeasurementNum: true });
   }
 
   getLocation = () => {
@@ -229,6 +235,7 @@ export default class App extends Component {
   }
 
   showData = () => {
+    this.setState({ showMeasurementNum: false });
     this.setState({ showDataMode: true });
     this.setState({ measurementStarted: true });
   }
@@ -282,6 +289,11 @@ export default class App extends Component {
             )}
           </>
         )}
+        {this.state.showMeasurementNum &&
+          <View style={{ paddingHorizontal: 50 }}>
+            <Text >Current measurement number: {this.state.measurementNumber}</Text>
+          </View>
+        }
       </SafeAreaView>
     );
   }

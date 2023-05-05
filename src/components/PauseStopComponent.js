@@ -21,6 +21,7 @@ class PauseStopComponent extends React.Component {
         this.stopInterval()
         this.props.updateState({ measurementStarted: false });
         this.props.updateState({ measurementNumber: this.props.state.measurementNumber + 1 });
+        this.props.updateState({ showMeasurementNum: false });
     }
 
     pauseMeasurement = () => {
