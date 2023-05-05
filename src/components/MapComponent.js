@@ -12,6 +12,8 @@ class MapComponent extends React.Component {
         this.state = {
             isInternet: false,
             centerPos: this.setCenterPos(), 
+            startPos: this.setStartPos(),
+            markerSize: this.setMarkerSize(),
         }
 
         NetInfo.fetch().then(state => {
@@ -20,24 +22,34 @@ class MapComponent extends React.Component {
             }
         });
 
-        let posNum = this.props.gpsData.length;
-        if(posNum != 0){
-            let center = Math.floor((posNum)/2);
-            this.setState({centerPos: this.props.gpsData[center]});
-        }
-        
     }
 
     setCenterPos = ()=> {
         let posNum = this.props.gpsData.length;
         if(posNum != 0){
             let center = Math.floor((posNum)/2);
-            console.log(this.props.gpsData[center]);
             return this.props.gpsData[center];
         }
         else{
-            console.log({lat: 48.14816, lng: 17.10674});
             return {lat: 48.14816, lng: 17.10674};
+        }
+    }
+
+    setStartPos = ()=> {
+        if(this.props.gpsData.length != 0){
+            return this.props.gpsData[0];
+        }
+        else{
+            return {lat: 0, lng: 0};
+        }
+    }
+
+    setMarkerSize = ()=> {
+        if(this.props.gpsData.length != 0){
+            return [10, 10];
+        }
+        else{
+            return [0, 0];
         }
     }
 
@@ -75,22 +87,20 @@ class MapComponent extends React.Component {
                         <LeafletView
                             mapMarkers={[
                                 {
-                                    position: {
-                                        lat: 37.78825,
-                                        lng: -122.4324,
-                                    },
-                                    icon: '📍',
-                                    size: [32, 32],
+                                    position: this.state.startPos,
+                                    //icon: '📍',
+                                    icon: 'Start',
+                                    size: this.state.markerSize,
                                 },
                             ]}
-                            // mapShapes={[
-                            //     {
-                            //         shapeType: MapShapeType.POLYLINE,
-                            //         color: "red",
-                            //         id: "6",
-                            //         positions: this.state.points
-                            //     }
-                            // ]}
+                            mapShapes={[
+                                {
+                                    shapeType: MapShapeType.POLYLINE,
+                                    color: "red",
+                                    id: "6",
+                                    positions: this.props.gpsData
+                                }
+                            ]}
                             mapCenterPosition={this.state.centerPos}
                             zoom={14}
                             doDebug={false}
