@@ -11,6 +11,7 @@ class MapComponent extends React.Component {
 
         this.state = {
             isInternet: false,
+            centerPos: this.setCenterPos(), 
         }
 
         NetInfo.fetch().then(state => {
@@ -19,6 +20,25 @@ class MapComponent extends React.Component {
             }
         });
 
+        let posNum = this.props.gpsData.length;
+        if(posNum != 0){
+            let center = Math.floor((posNum)/2);
+            this.setState({centerPos: this.props.gpsData[center]});
+        }
+        
+    }
+
+    setCenterPos = ()=> {
+        let posNum = this.props.gpsData.length;
+        if(posNum != 0){
+            let center = Math.floor((posNum)/2);
+            console.log(this.props.gpsData[center]);
+            return this.props.gpsData[center];
+        }
+        else{
+            console.log({lat: 48.14816, lng: 17.10674});
+            return {lat: 48.14816, lng: 17.10674};
+        }
     }
 
     goBack = () => {
@@ -71,10 +91,8 @@ class MapComponent extends React.Component {
                             //         positions: this.state.points
                             //     }
                             // ]}
-                            mapCenterPosition={{
-                                lat: 37.78825,
-                                lng: -122.4324,
-                            }}
+                            mapCenterPosition={this.state.centerPos}
+                            zoom={14}
                             doDebug={false}
                         />
                     </SafeAreaView>

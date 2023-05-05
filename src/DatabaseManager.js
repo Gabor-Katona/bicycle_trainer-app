@@ -247,6 +247,7 @@ export default class DatabaseManager {
                         var accelYL = [];
                         //var accelZL = [];
                         var dateL = [];
+                        var gpsLocal = [];
                         var gpsL = [];
 
                         if (len != 0) {
@@ -263,7 +264,7 @@ export default class DatabaseManager {
                                 dateL.push(results.rows.item(i).Time);
                                 //dateL.push(results.rows.item(i).Time.split(" ")[1]);
                                 if (results.rows.item(i).Latitude != null) {
-                                    gpsL.push([results.rows.item(i).Latitude, results.rows.item(i).Longitude]);
+                                    gpsL.push({ lat: results.rows.item(i).Latitude, lng: results.rows.item(i).Longitude });
                                 }
                                 //TODO gps
                             }

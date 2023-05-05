@@ -299,7 +299,7 @@ class DataVisualizer extends React.Component {
                     }
                 </ScrollView>
             ) : (
-                <MapComponent updateState={this.handleUpdateState}/>
+                <MapComponent updateState={this.handleUpdateState} gpsData={this.state.gps}/>
             )} 
             </>
         );
