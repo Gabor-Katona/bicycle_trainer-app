@@ -19,6 +19,7 @@ class PauseStopComponent extends React.Component {
     stopMeasurement = () => {
         KeepAwake.deactivate();
         this.stopInterval()
+        setTimeout(() => {}, 300)
         this.props.updateState({ measurementStarted: false });
         this.props.updateState({ measurementNumber: this.props.state.measurementNumber + 1 });
         this.props.updateState({ showMeasurementNum: false });

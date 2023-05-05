@@ -1,6 +1,7 @@
 import React from 'react';
-import { Text, Button, TouchableOpacity, View, Dimensions, ScrollView, ToastAndroid } from "react-native";
+import { Text, Button, SafeAreaView, View} from "react-native";
 import NetInfo from "@react-native-community/netinfo";
+import { LatLng, LeafletView, MapShapeType } from 'react-native-leaflet-view';
 
 
 class MapComponent extends React.Component {
@@ -50,7 +51,33 @@ class MapComponent extends React.Component {
                         />
                     </View>
                 ) : (
-                    <Text>Map</Text>
+                    <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                        <LeafletView
+                            mapMarkers={[
+                                {
+                                    position: {
+                                        lat: 37.78825,
+                                        lng: -122.4324,
+                                    },
+                                    icon: '📍',
+                                    size: [32, 32],
+                                },
+                            ]}
+                            // mapShapes={[
+                            //     {
+                            //         shapeType: MapShapeType.POLYLINE,
+                            //         color: "red",
+                            //         id: "6",
+                            //         positions: this.state.points
+                            //     }
+                            // ]}
+                            mapCenterPosition={{
+                                lat: 37.78825,
+                                lng: -122.4324,
+                            }}
+                            doDebug={false}
+                        />
+                    </SafeAreaView>
                 )}
             </>
         );

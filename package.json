@@ -20,9 +20,11 @@
     "react-native-chart-kit": "^6.12.0",
     "react-native-geolocation-service": "^5.3.1",
     "react-native-keep-awake": "^4.0.0",
+    "react-native-leaflet-view": "^0.1.2",
     "react-native-select-dropdown": "^3.3.3",
     "react-native-sqlite-storage": "^6.0.1",
-    "react-native-svg": "^13.9.0"
+    "react-native-svg": "^13.9.0",
+    "react-native-webview": "^12.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
