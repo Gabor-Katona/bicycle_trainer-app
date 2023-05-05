@@ -11,6 +11,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@react-native-community/netinfo": "^9.3.9",
     "buffer": "^6.0.3",
     "convert-string": "^0.1.0",
     "react": "18.1.0",

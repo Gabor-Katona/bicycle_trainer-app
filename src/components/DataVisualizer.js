@@ -2,6 +2,7 @@ import React from 'react';
 import { Text, Button, TouchableOpacity, View, Dimensions, ScrollView, ToastAndroid } from "react-native";
 import SelectDropdown from 'react-native-select-dropdown';
 import { LineChart } from "react-native-chart-kit";
+import MapComponent from './MapComponent';
 
 
 class DataVisualizer extends React.Component {
@@ -22,6 +23,7 @@ class DataVisualizer extends React.Component {
         this.state = {
             waitData: false,
             showData: false,
+            showMap: false,
             temperature: [0],
             humidity: [0],
             pressure: [0],
@@ -74,12 +76,14 @@ class DataVisualizer extends React.Component {
     }
 
     showMap = () => {
-        console.log("show map");
+        //this.setState({ showData: false })
+        this.setState({showMap: true});
     }
 
     render() {
         return (
             <>
+            {!this.state.showMap ? (
                 <ScrollView >
                     <View style={{ paddingHorizontal: 50, paddingVertical: 10 }}>
                         <Button
@@ -294,6 +298,9 @@ class DataVisualizer extends React.Component {
                         </>
                     }
                 </ScrollView>
+            ) : (
+                <MapComponent updateState={this.handleUpdateState}/>
+            )} 
             </>
         );
     }
