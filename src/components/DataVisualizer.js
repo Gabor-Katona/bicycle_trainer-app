@@ -41,6 +41,9 @@ class DataVisualizer extends React.Component {
             altitude: [0],
             speed: [0],
             showAnim: false,
+            dateGPS: [""],
+            distance: 0,
+            speedGPS: [0],
         }
 
         this.props.dbManager.getMeasurementByNumber(this.handleUpdateState);
@@ -252,14 +255,15 @@ class DataVisualizer extends React.Component {
                                         }}
                                     />
                                 </View>
+                                <Text style={{ marginLeft: 10, color: "black", fontWeight: "bold" }}>Distance: {this.state.distance}m</Text>
                                 <View >
-                                    <Text style={{ marginLeft: 10, color: "black", fontWeight: "bold" }}>Speed:</Text>
+                                    <Text style={{ marginLeft: 10, color: "black", fontWeight: "bold" }}>Speed from GPS:</Text>
                                     <LineChart
                                         data={{
-                                            labels: this.state.date,
+                                            labels: this.state.dateGPS,
                                             datasets: [
                                                 {
-                                                    data: this.state.speed
+                                                    data: this.state.speedGPS
                                                 }
                                             ]
                                         }}
@@ -282,19 +286,19 @@ class DataVisualizer extends React.Component {
                                     />
                                 </View>
                                 <View >
-                                    <Text style={{ marginLeft: 10, color: "black", fontWeight: "bold" }}>Forward acceleration:</Text>
+                                    <Text style={{ marginLeft: 10, color: "black", fontWeight: "bold" }}>Speed from accelorometer:</Text>
                                     <LineChart
                                         data={{
                                             labels: this.state.date,
                                             datasets: [
                                                 {
-                                                    data: this.state.accelY
+                                                    data: this.state.speed
                                                 }
                                             ]
                                         }}
                                         width={Dimensions.get("window").width} // from react-native
                                         height={400}
-                                        yAxisSuffix="m/s^2"
+                                        yAxisSuffix="km/h"
                                         withVerticalLines={false}
                                         verticalLabelRotation={70}
                                         xLabelsOffset={-10}
@@ -302,7 +306,7 @@ class DataVisualizer extends React.Component {
                                         chartConfig={this.chartConf}
                                         onDataPointClick={(value) => {
                                             ToastAndroid.showWithGravityAndOffset(
-                                                value.value.toString() + "m/s^2",
+                                                value.value.toString() + "km/h",
                                                 ToastAndroid.SHORT,
                                                 ToastAndroid.BOTTOM,
                                                 25, 50,

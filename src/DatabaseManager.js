@@ -13,6 +13,7 @@ export default class DatabaseManager {
             () => { },
             error => { console.log(error) }
         );
+
     }
 
     dropTables = () => {
@@ -225,6 +226,44 @@ export default class DatabaseManager {
         return result;
     }
 
+    distance_on_geoid = (lat1, lon1, lat2, lon2) => {
+        // Convert degrees to radians
+        lat1 = lat1 * Math.PI / 180.0;
+        lon1 = lon1 * Math.PI / 180.0;
+        lat2 = lat2 * Math.PI / 180.0;
+        lon2 = lon2 * Math.PI / 180.0;
+        // radius of earth in metres
+        var r = 6378100;
+        // P
+        var rho1 = r * Math.cos(lat1);
+        var z1 = r * Math.sin(lat1);
+        var x1 = rho1 * Math.cos(lon1);
+        var y1 = rho1 * Math.sin(lon1);
+        // Q
+        var rho2 = r * Math.cos(lat2);
+        var z2 = r * Math.sin(lat2);
+        var x2 = rho2 * Math.cos(lon2);
+        var y2 = rho2 * Math.sin(lon2);
+        // Dot product
+        var dot = (x1 * x2 + y1 * y2 + z1 * z2);
+        var cos_theta = dot / (r * r);
+        var theta = Math.acos(cos_theta);
+        // Distance in Metres
+        return r * theta;
+    }
+
+    velocityFromGPS = (lat1, lon1, lat2, lon2, date1, date2) => {
+        var dist = this.distance_on_geoid(lat1, lon1, lat2, lon2);
+        var time = this.getTimeDiff(date1, date2)
+        return dist / time;
+    }
+
+    distanceFromGPS = (lat1, lon1, lat2, lon2) => {
+        var dist = this.distance_on_geoid(lat1, lon1, lat2, lon2);
+        return dist;
+    }
+
+
     getMeasurementByNumber = async (updateState, number) => {
         var list = [];
         try {
@@ -248,6 +287,7 @@ export default class DatabaseManager {
                         var dateL = [];
                         var gpsLocal = [];
                         var gpsL = [];
+                        var dateGPS = [];
 
                         if (len != 0) {
                             for (let i = 0; i < len; i++) {
@@ -264,8 +304,9 @@ export default class DatabaseManager {
                                 //dateL.push(results.rows.item(i).Time.split(" ")[1]);
                                 if (results.rows.item(i).Latitude != null) {
                                     gpsL.push({ lat: results.rows.item(i).Latitude, lng: results.rows.item(i).Longitude });
+                                    gpsLocal.push([results.rows.item(i).Latitude, results.rows.item(i).Longitude]);
+                                    dateGPS.push(results.rows.item(i).Time);                                    
                                 }
-                                //TODO gps
                             }
 
                             let altitudeL = []
@@ -285,7 +326,31 @@ export default class DatabaseManager {
                                 velocity.push(velY)
                             }
 
+                            // calculate velocity
+                            //var sizeDiff = dateL.length - gpsLocal.length;
+                            var velocityGPS = [0]
+                            var prevIndex = 0;
+                            var prevLat = gpsLocal[prevIndex][0];
+                            var prevLon = gpsLocal[prevIndex][1];
+                            var dist = 0;
+                            for (var i = 1; i < gpsLocal.length; i++) {
+                                if (prevLat !== gpsLocal[i][0] || prevLon !== gpsLocal[i][1]) {
+                                    var nextLat = gpsLocal[i][0];
+                                    var nextLon = gpsLocal[i][1];
+                                    var velGPS = this.velocityFromGPS(prevLat, prevLon, nextLat, nextLon, dateGPS[prevIndex], dateGPS[i])
+                                    dist += this.distanceFromGPS(prevLat, prevLon, nextLat, nextLon);
+                                    velGPS *= 3.6
+                                    velGPS = Math.round(velGPS * 100) / 100
+                                    velocityGPS.push(velGPS)
+                                    prevIndex = i;
+                                    prevLat = nextLat;
+                                    prevLon = nextLon;
+                                }
+                            }
+
+                            dist = Math.round(dist * 100) / 100
                             var times = this.getEvenlySpacedElements(dateL);
+                            var timeGPS = this.getEvenlySpacedElements(dateGPS);
 
                             updateState({ temperature: temperatureL });
                             updateState({ humidity: humidityL });
@@ -301,9 +366,12 @@ export default class DatabaseManager {
                             updateState({ day: results.rows.item(0).Time.split(" ")[0] });
                             updateState({ altitude: altitudeL });
                             updateState({ speed: velocity });
+                            updateState({ speedGPS: velocityGPS});
+                            updateState({ dateGPS: timeGPS });
+                            updateState({ distance: dist });
 
-                            updateState({waitData: false });
-                            updateState({showData: true });
+                            updateState({ waitData: false });
+                            updateState({ showData: true });
                         }
 
                     }
