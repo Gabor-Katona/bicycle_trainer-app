@@ -231,8 +231,7 @@ export default class DatabaseManager {
             await db.transaction(async (tx) => {
                 // TODO Measurement_number not only 1
                 await tx.executeSql(
-                    "SELECT Time, Temperature, Humidity, Pressure, Latitude, Longitude, Gyroscope_x, Gyroscope_y, Gyroscope_z, "
-                    + "Accelerometer_x, Accelerometer_y, Accelerometer_z "
+                    "SELECT Time, Temperature, Humidity, Pressure, Latitude, Longitude, Gyroscope_y, Accelerometer_y "
                     + "FROM time INNER JOIN enviromental ON enviromental.Id = time.enviromental_id INNER JOIN movement ON movement.id = time.movement_id WHERE time.Measurement_number = (?);",
                     [number],
                     (tx, results) => {
@@ -241,7 +240,7 @@ export default class DatabaseManager {
                         var humidityL = [];
                         var pressureL = [];
                         //var gyroXL = [];
-                        //var gyroYL = [];
+                        var gyroYL = [];
                         //var gyroZL = [];
                         //var accelXL = [];
                         var accelYL = [];
@@ -256,7 +255,7 @@ export default class DatabaseManager {
                                 humidityL.push(results.rows.item(i).Humidity);
                                 pressureL.push(results.rows.item(i).Pressure);
                                 //gyroXL.push(results.rows.item(i).Gyroscope_x / 10);
-                                //gyroYL.push(results.rows.item(i).Gyroscope_y / 10);
+                                gyroYL.push(results.rows.item(i).Gyroscope_y / 10);
                                 //gyroZL.push(results.rows.item(i).Gyroscope_z / 10);
                                 //accelXL.push(results.rows.item(i).Accelerometer_x / 100);
                                 accelYL.push(results.rows.item(i).Accelerometer_y / 100);
@@ -292,7 +291,7 @@ export default class DatabaseManager {
                             updateState({ humidity: humidityL });
                             updateState({ pressure: pressureL });
                             //updateState({ gyroX: gyroXL });
-                            //updateState({ gyroY: gyroYL });
+                            updateState({ gyroY: gyroYL });
                             //updateState({ gyroZ: gyroZL });
                             //updateState({ accelX: accelXL });
                             updateState({ accelY: accelYL });

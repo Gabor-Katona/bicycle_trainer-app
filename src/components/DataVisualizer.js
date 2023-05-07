@@ -1,8 +1,9 @@
 import React from 'react';
-import { Text, Button, TouchableOpacity, View, Dimensions, ScrollView, ToastAndroid } from "react-native";
+import { Text, Button, TouchableOpacity, View, Dimensions, ScrollView, ToastAndroid, TouchableWithoutFeedback, Image, Animated, Easing } from "react-native";
 import SelectDropdown from 'react-native-select-dropdown';
 import { LineChart } from "react-native-chart-kit";
 import MapComponent from './MapComponent';
+import AnimateInclination from './AnimateInclination';
 
 
 class DataVisualizer extends React.Component {
@@ -38,7 +39,8 @@ class DataVisualizer extends React.Component {
             measurementNum: [],
             day: 0,
             altitude: [0],
-            speed: [0]
+            speed: [0],
+            showAnim: false,
         }
 
         this.props.dbManager.getMeasurementByNumber(this.handleUpdateState);
@@ -46,6 +48,7 @@ class DataVisualizer extends React.Component {
         //console.log("num is:");
         //console.log(this.state.values);
     }
+
 
     handleUpdateState = (newState) => {
         this.setState(newState);
@@ -77,230 +80,248 @@ class DataVisualizer extends React.Component {
 
     showMap = () => {
         //this.setState({ showData: false })
-        this.setState({showMap: true});
+        this.setState({ showMap: true });
+        this.setState({ showAnim: false });
+    }
+
+    animateInclination = () => {
+        this.setState({ showMap: true });
+        this.setState({ showAnim: true });
     }
 
     render() {
         return (
             <>
-            {!this.state.showMap ? (
-                <ScrollView >
-                    <View style={{ paddingHorizontal: 50, paddingVertical: 10 }}>
-                        <Button
-                            title={"Go back"}
-                            onPress={this.backToMeasurement}
-                        />
+                {!this.state.showMap ? (
+                    <ScrollView >
+                        <View style={{ paddingHorizontal: 50, paddingVertical: 10 }}>
+                            <Button
+                                title={"Go back"}
+                                onPress={this.backToMeasurement}
+                            />
 
-                        <SelectDropdown buttonStyle={{ marginTop: 10, width: '100%' }}
-                            data={this.state.measurementNum}
-                            onSelect={(selectedItem, index) => {
-                                this.setState({ showData: false })
-                                this.setState({ waitData: true })
-                                this.selectedMeasurementNumber(selectedItem);
-                            }}
+                            <SelectDropdown buttonStyle={{ marginTop: 10, width: '100%' }}
+                                data={this.state.measurementNum}
+                                onSelect={(selectedItem, index) => {
+                                    this.setState({ showData: false })
+                                    this.setState({ waitData: true })
+                                    this.selectedMeasurementNumber(selectedItem);
+                                }}
 
-                            buttonTextAfterSelection={(selectedItem, index) => {
-                                return selectedItem
-                            }}
-                            rowTextForSelection={(item, index) => {
-                                return item
-                            }}
-                            defaultButtonText={'Select measurement'}
-                            renderDropdownIcon={isOpened => {
-                                return <Text style={{ fontSize: 22, paddingRight: 10 }}>˅</Text>;
-                            }}
-                            dropdownIconPosition={'right'}
-                        />
-                    </View>
-                    {this.state.waitData &&
-                        <Text style={{ paddingTop: 70, color: "black", textAlign: 'center', fontWeight: 'bold', fontSize: 20 }}>Please wait</Text>
-                    }
-                    {this.state.showData &&
-                        <>
-                            <View style={{ paddingHorizontal: 50}}>
-                                <Button
-                                    title={"Show map"}
-                                    onPress={this.showMap}
-                                />
-                            </View>
-                            <Text style={{ marginLeft: 10, color: "black" }}>Measurement date: {this.state.day}</Text>
-                            <View >
-                                <Text style={{ marginLeft: 10, color: "black", fontWeight: "bold" }}>Temperature:</Text>
-                                <LineChart
-                                    data={{
-                                        labels: this.state.date,
-                                        datasets: [
-                                            {
-                                                data: this.state.temperature
-                                            }
-                                        ]
-                                    }}
-                                    width={Dimensions.get("window").width} // from react-native
-                                    height={400}
-                                    yAxisSuffix="°C"
-                                    withVerticalLines={false}
-                                    verticalLabelRotation={70}
-                                    xLabelsOffset={-15}
-                                    chartConfig={this.chartConf}
-                                    onDataPointClick={(value) => {
-                                        ToastAndroid.showWithGravityAndOffset(
-                                            value.value.toString() + "°C",
-                                            ToastAndroid.SHORT,
-                                            ToastAndroid.BOTTOM,
-                                            25, 50,
-                                        );
-                                    }}
-                                />
-                            </View>
-                            <View >
-                                <Text style={{ marginLeft: 10, color: "black", fontWeight: "bold" }}>Humidity:</Text>
-                                <LineChart
-                                    data={{
-                                        labels: this.state.date,
-                                        datasets: [
-                                            {
-                                                data: this.state.humidity
-                                            }
-                                        ]
-                                    }}
-                                    width={Dimensions.get("window").width} // from react-native
-                                    height={400}
-                                    yAxisSuffix="%"
-                                    withVerticalLines={false}
-                                    verticalLabelRotation={70}
-                                    xLabelsOffset={-10}
-                                    chartConfig={this.chartConf}
-                                    onDataPointClick={(value) => {
-                                        ToastAndroid.showWithGravityAndOffset(
-                                            value.value.toString() + "%",
-                                            ToastAndroid.SHORT,
-                                            ToastAndroid.BOTTOM,
-                                            25, 50,
-                                        );
-                                    }}
-                                />
-                            </View>
-                            <View >
-                                <Text style={{ marginLeft: 10, color: "black", fontWeight: "bold" }}>Pressure:</Text>
-                                <LineChart
-                                    data={{
-                                        labels: this.state.date,
-                                        datasets: [
-                                            {
-                                                data: this.state.pressure
-                                            }
-                                        ]
-                                    }}
-                                    width={Dimensions.get("window").width} // from react-native
-                                    height={400}
-                                    yAxisSuffix="Pa"
-                                    withVerticalLines={false}
-                                    verticalLabelRotation={70}
-                                    xLabelsOffset={-10}
-                                    yLabelsOffset={5}
-                                    chartConfig={this.chartConf}
-                                    onDataPointClick={(value) => {
-                                        ToastAndroid.showWithGravityAndOffset(
-                                            value.value.toString() + "Pa",
-                                            ToastAndroid.SHORT,
-                                            ToastAndroid.BOTTOM,
-                                            25, 50,
-                                        );
-                                    }}
-                                />
-                            </View>
-                            <View >
-                                <Text style={{ marginLeft: 10, color: "black", fontWeight: "bold" }}>Altitude:</Text>
-                                <LineChart
-                                    data={{
-                                        labels: this.state.date,
-                                        datasets: [
-                                            {
-                                                data: this.state.altitude
-                                            }
-                                        ]
-                                    }}
-                                    width={Dimensions.get("window").width} // from react-native
-                                    height={400}
-                                    yAxisSuffix="m"
-                                    withVerticalLines={false}
-                                    verticalLabelRotation={70}
-                                    xLabelsOffset={-10}
-                                    chartConfig={this.chartConf}
-                                    onDataPointClick={(value) => {
-                                        ToastAndroid.showWithGravityAndOffset(
-                                            value.value.toString() + "m",
-                                            ToastAndroid.SHORT,
-                                            ToastAndroid.BOTTOM,
-                                            25, 50,
-                                        );
-                                    }}
-                                />
-                            </View>
-                            <View >
-                                <Text style={{ marginLeft: 10, color: "black", fontWeight: "bold" }}>Speed:</Text>
-                                <LineChart
-                                    data={{
-                                        labels: this.state.date,
-                                        datasets: [
-                                            {
-                                                data: this.state.speed
-                                            }
-                                        ]
-                                    }}
-                                    width={Dimensions.get("window").width} // from react-native
-                                    height={400}
-                                    yAxisSuffix="km/h"
-                                    withVerticalLines={false}
-                                    verticalLabelRotation={70}
-                                    xLabelsOffset={-10}
-                                    yLabelsOffset={5}
-                                    chartConfig={this.chartConf}
-                                    onDataPointClick={(value) => {
-                                        ToastAndroid.showWithGravityAndOffset(
-                                            value.value.toString() + "km/h",
-                                            ToastAndroid.SHORT,
-                                            ToastAndroid.BOTTOM,
-                                            25, 50,
-                                        );
-                                    }}
-                                />
-                            </View>
-                            <View >
-                                <Text style={{ marginLeft: 10, color: "black", fontWeight: "bold" }}>Forward acceleration:</Text>
-                                <LineChart
-                                    data={{
-                                        labels: this.state.date,
-                                        datasets: [
-                                            {
-                                                data: this.state.accelY
-                                            }
-                                        ]
-                                    }}
-                                    width={Dimensions.get("window").width} // from react-native
-                                    height={400}
-                                    yAxisSuffix="m/s^2"
-                                    withVerticalLines={false}
-                                    verticalLabelRotation={70}
-                                    xLabelsOffset={-10}
-                                    yLabelsOffset={5}
-                                    chartConfig={this.chartConf}
-                                    onDataPointClick={(value) => {
-                                        ToastAndroid.showWithGravityAndOffset(
-                                            value.value.toString() + "m/s^2",
-                                            ToastAndroid.SHORT,
-                                            ToastAndroid.BOTTOM,
-                                            25, 50,
-                                        );
-                                    }}
-                                />
-                            </View>
-                        </>
-                    }
-                </ScrollView>
-            ) : (
-                <MapComponent updateState={this.handleUpdateState} gpsData={this.state.gps}/>
-            )} 
+                                buttonTextAfterSelection={(selectedItem, index) => {
+                                    return selectedItem
+                                }}
+                                rowTextForSelection={(item, index) => {
+                                    return item
+                                }}
+                                defaultButtonText={'Select measurement'}
+                                renderDropdownIcon={isOpened => {
+                                    return <Text style={{ fontSize: 22, paddingRight: 10 }}>˅</Text>;
+                                }}
+                                dropdownIconPosition={'right'}
+                            />
+                        </View>
+                        {this.state.waitData &&
+                            <Text style={{ paddingTop: 70, color: "black", textAlign: 'center', fontWeight: 'bold', fontSize: 20 }}>Please wait</Text>
+                        }
+                        {this.state.showData &&
+                            <>
+                                <View style={{ paddingHorizontal: 50 }}>
+                                    <Button
+                                        title={"Show map"}
+                                        onPress={this.showMap}
+                                    />
+                                    <View style={{ paddingVertical: 5}}>
+                                        <Button
+                                            title={"Animate inclination"}
+                                            onPress={this.animateInclination}
+                                        />
+                                    </View>
+                                </View>
+                                <Text style={{ marginLeft: 10, color: "black" }}>Measurement date: {this.state.day}</Text>
+                                <View >
+                                    <Text style={{ marginLeft: 10, color: "black", fontWeight: "bold" }}>Temperature:</Text>
+                                    <LineChart
+                                        data={{
+                                            labels: this.state.date,
+                                            datasets: [
+                                                {
+                                                    data: this.state.temperature
+                                                }
+                                            ]
+                                        }}
+                                        width={Dimensions.get("window").width} // from react-native
+                                        height={400}
+                                        yAxisSuffix="°C"
+                                        withVerticalLines={false}
+                                        verticalLabelRotation={70}
+                                        xLabelsOffset={-15}
+                                        chartConfig={this.chartConf}
+                                        onDataPointClick={(value) => {
+                                            ToastAndroid.showWithGravityAndOffset(
+                                                value.value.toString() + "°C",
+                                                ToastAndroid.SHORT,
+                                                ToastAndroid.BOTTOM,
+                                                25, 50,
+                                            );
+                                        }}
+                                    />
+                                </View>
+                                <View >
+                                    <Text style={{ marginLeft: 10, color: "black", fontWeight: "bold" }}>Humidity:</Text>
+                                    <LineChart
+                                        data={{
+                                            labels: this.state.date,
+                                            datasets: [
+                                                {
+                                                    data: this.state.humidity
+                                                }
+                                            ]
+                                        }}
+                                        width={Dimensions.get("window").width} // from react-native
+                                        height={400}
+                                        yAxisSuffix="%"
+                                        withVerticalLines={false}
+                                        verticalLabelRotation={70}
+                                        xLabelsOffset={-10}
+                                        chartConfig={this.chartConf}
+                                        onDataPointClick={(value) => {
+                                            ToastAndroid.showWithGravityAndOffset(
+                                                value.value.toString() + "%",
+                                                ToastAndroid.SHORT,
+                                                ToastAndroid.BOTTOM,
+                                                25, 50,
+                                            );
+                                        }}
+                                    />
+                                </View>
+                                <View >
+                                    <Text style={{ marginLeft: 10, color: "black", fontWeight: "bold" }}>Pressure:</Text>
+                                    <LineChart
+                                        data={{
+                                            labels: this.state.date,
+                                            datasets: [
+                                                {
+                                                    data: this.state.pressure
+                                                }
+                                            ]
+                                        }}
+                                        width={Dimensions.get("window").width} // from react-native
+                                        height={400}
+                                        yAxisSuffix="Pa"
+                                        withVerticalLines={false}
+                                        verticalLabelRotation={70}
+                                        xLabelsOffset={-10}
+                                        yLabelsOffset={5}
+                                        chartConfig={this.chartConf}
+                                        onDataPointClick={(value) => {
+                                            ToastAndroid.showWithGravityAndOffset(
+                                                value.value.toString() + "Pa",
+                                                ToastAndroid.SHORT,
+                                                ToastAndroid.BOTTOM,
+                                                25, 50,
+                                            );
+                                        }}
+                                    />
+                                </View>
+                                <View >
+                                    <Text style={{ marginLeft: 10, color: "black", fontWeight: "bold" }}>Altitude:</Text>
+                                    <LineChart
+                                        data={{
+                                            labels: this.state.date,
+                                            datasets: [
+                                                {
+                                                    data: this.state.altitude
+                                                }
+                                            ]
+                                        }}
+                                        width={Dimensions.get("window").width} // from react-native
+                                        height={400}
+                                        yAxisSuffix="m"
+                                        withVerticalLines={false}
+                                        verticalLabelRotation={70}
+                                        xLabelsOffset={-10}
+                                        chartConfig={this.chartConf}
+                                        onDataPointClick={(value) => {
+                                            ToastAndroid.showWithGravityAndOffset(
+                                                value.value.toString() + "m",
+                                                ToastAndroid.SHORT,
+                                                ToastAndroid.BOTTOM,
+                                                25, 50,
+                                            );
+                                        }}
+                                    />
+                                </View>
+                                <View >
+                                    <Text style={{ marginLeft: 10, color: "black", fontWeight: "bold" }}>Speed:</Text>
+                                    <LineChart
+                                        data={{
+                                            labels: this.state.date,
+                                            datasets: [
+                                                {
+                                                    data: this.state.speed
+                                                }
+                                            ]
+                                        }}
+                                        width={Dimensions.get("window").width} // from react-native
+                                        height={400}
+                                        yAxisSuffix="km/h"
+                                        withVerticalLines={false}
+                                        verticalLabelRotation={70}
+                                        xLabelsOffset={-10}
+                                        yLabelsOffset={5}
+                                        chartConfig={this.chartConf}
+                                        onDataPointClick={(value) => {
+                                            ToastAndroid.showWithGravityAndOffset(
+                                                value.value.toString() + "km/h",
+                                                ToastAndroid.SHORT,
+                                                ToastAndroid.BOTTOM,
+                                                25, 50,
+                                            );
+                                        }}
+                                    />
+                                </View>
+                                <View >
+                                    <Text style={{ marginLeft: 10, color: "black", fontWeight: "bold" }}>Forward acceleration:</Text>
+                                    <LineChart
+                                        data={{
+                                            labels: this.state.date,
+                                            datasets: [
+                                                {
+                                                    data: this.state.accelY
+                                                }
+                                            ]
+                                        }}
+                                        width={Dimensions.get("window").width} // from react-native
+                                        height={400}
+                                        yAxisSuffix="m/s^2"
+                                        withVerticalLines={false}
+                                        verticalLabelRotation={70}
+                                        xLabelsOffset={-10}
+                                        yLabelsOffset={5}
+                                        chartConfig={this.chartConf}
+                                        onDataPointClick={(value) => {
+                                            ToastAndroid.showWithGravityAndOffset(
+                                                value.value.toString() + "m/s^2",
+                                                ToastAndroid.SHORT,
+                                                ToastAndroid.BOTTOM,
+                                                25, 50,
+                                            );
+                                        }}
+                                    />
+                                </View>
+                            </>
+                        }
+                    </ScrollView>
+                ) : (
+                    <>
+                        {!this.state.showAnim ? (
+                            <MapComponent updateState={this.handleUpdateState} gpsData={this.state.gps} />
+                        ) : (
+                            <AnimateInclination updateState={this.handleUpdateState} gyro={this.state.gyroY} />
+                        )}
+                    </>
+                )}
             </>
         );
     }
