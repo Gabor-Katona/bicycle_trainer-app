@@ -145,6 +145,27 @@ export default class App extends Component {
         if (result) {
           console.log('Permission is OK');
         } else {
+          PermissionsAndroid.requestMultiple(
+            [PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+               PermissionsAndroid.PERMISSIONS.BLUETOOTH_SCAN, PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT]
+          ).then((result_) => {
+            if (result_) {
+              console.log('User accept');
+            } else {
+              console.log('User refuse');
+            }
+          });
+        }
+      });
+    }
+
+    /*if (Platform.OS === 'android' && Platform.Version >= 23) {
+      PermissionsAndroid.check(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
+      ).then((result) => {
+        if (result) {
+          console.log('Permission is OK');
+        } else {
           PermissionsAndroid.request(
             PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
           ).then((result_) => {
@@ -156,7 +177,7 @@ export default class App extends Component {
           });
         }
       });
-    }
+    }*/
 
     NativeAppEventEmitter.addListener(
       'BleManagerDiscoverPeripheral',
