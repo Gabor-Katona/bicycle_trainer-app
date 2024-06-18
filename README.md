@@ -29,11 +29,93 @@ This app uses a number of open source projects to work properly:
 - react-native-svg - 13.9.0 
 - react-native-webview - 12.0.2 
 
+## User Manual for the Application
+
+To ensure the application functions correctly, it must have access to location services and nearby devices (Bluetooth).
+
+### 1. Connecting to the Development Board
+
+1. Enable Bluetooth and location services on your mobile phone.
+2. Open the Bicycle Trainer application.
+3. Click the "START SCANNING" button to search for BLE devices.
+<div align="center">
+    <img src="./readme_images/img1.jpg" alt="Example Image" width="150"/>
+</div>
+
+4. Available devices with their MAC addresses will be displayed. Click on the development board you want to connect to (the MAC address is located on the back of the device).
+<div align="center">
+    <img src="./readme_images/img2.jpg" alt="Example Image" width="150"/>
+</div>
+
+5. If the connection is successful, you will see a screen with buttons labeled "START MEASUREMENT," "DELETE DATA," "SHOW DATA," and a header indicating the connected device.
+<div align="center">
+    <img src="./readme_images/img3.jpg" alt="Example Image" width="150"/>
+</div>
+
+### 2. Measurement
+
+1. After a successful connection, press the "START MEASUREMENT" button to start the measurement. An information message and the measurement number will be displayed. It's important to keep the screen on during the entire measurement.
+<div align="center">
+    <img src="./readme_images/img4.jpg" alt="Example Image" width="150"/>
+</div>
+
+2. You can pause the measurement by pressing the "PAUSE MEASUREMENT" button and continue it by pressing the "CONTINUE MEASUREMENT" button.
+<div align="center">
+    <img src="./readme_images/img5.jpg" alt="Example Image" width="150"/>
+</div>
+
+3. You can stop the measurement by pressing the "STOP MEASUREMENT" button. After stopping, a screen with the buttons "START MEASUREMENT," "DELETE DATA," and "SHOW DATA" will be displayed.
+
+### 3. Data Display
+
+1. Press the "SHOW DATA" button.
+<div align="center">
+    <img src="./readme_images/img6.jpg" alt="Example Image" width="150"/>
+</div>
+
+2. A screen with a "GO BACK" button will be displayed, allowing you to return to the previous screen, along with a dropdown menu containing measurement numbers. Select the number corresponding to the measurement you want to display.
+<div align="center">
+    <img src="./readme_images/img7.jpg" alt="Example Image" width="150"/>
+</div>
+
+3. A message saying “PLEASE WAIT” will be displayed while the data is being processed.
+4. After processing, the measurement date, total distance, and graphs of temperature, humidity, pressure, altitude, speed (calculated from GPS coordinates and the accelerometer) will be displayed. Clicking on any point in the graph will show the value of that point. At the top, there are buttons for “SHOW MAP” and “ANIMATE INCLINATION.”
+<div align="center">
+    <img src="./readme_images/img8.jpg" alt="Example Image" width="150"/>
+</div>
+
+#### Show Map
+
+- When you press the "SHOW MAP" button, a map with the marked route and starting position will be displayed. If an internet connection is not available, you will be prompted to connect before the map is displayed. Once connected, you can load the map by pressing the "REFRESH" button. Use the "GO BACK" button to return to the previous screen.
+<div align="center">
+    <img src="./readme_images/img9.jpg" alt="Example Image" width="150"/>
+</div>
+
+#### Animate Inclination
+
+- When you press the "ANIMATE INCLINATION" button, a bicycle image will be displayed. Clicking on the bicycle will start an inclination animation during the ride. Holding the bicycle resets the animation, and clicking on it again restarts the animation.
+<div align="center">
+    <img src="./readme_images/img10.jpg" alt="Example Image" width="150"/>
+</div>
+
+### 4. Deleting Data
+
+1. After connecting, you can delete the measured data by pressing the "DELETE DATA" button.
+<div align="center">
+    <img src="./readme_images/img3.jpg" alt="Example Image" width="150"/>
+</div>
+
+2. A screen with the message "Do you want to delete all measured data?" will be displayed. If you press the "YES" button, all measured data will be deleted, and you will return to the previous screen with the buttons "START MEASUREMENT," "DELETE DATA," and "SHOW DATA." If you press "NO," the data will not be deleted, and you will return to the previous screen.
+<div align="center">
+    <img src="./readme_images/img11.jpg" alt="Example Image" width="150"/>
+</div>
+
+
 ## Documentation
 
 [Documentation (slovak language)](doc/Dokumentácia.pdf)
 
-## Technical Documentation and User Guide
+## Technical Documentation
 
 [Technical documentation (slovak language)](doc/Softverova_dokumentacia.pdf)
 
